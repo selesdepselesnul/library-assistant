@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="277.0"
+	prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="library.main.controller.AuthorTableFormController">
+	<children>
+		<TableView fx:id="authorTableView" prefHeight="200.0"
+			prefWidth="364.0">
+			<columns>
+				<TableColumn fx:id="nameTableColumn" prefWidth="363.0"
+					text="pengarang" />
+			</columns>
+			<contextMenu>
+				<ContextMenu>
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#handleDeleteMenuItem"
+							text="hapus" />
+					</items>
+				</ContextMenu>
+			</contextMenu>
+		</TableView>
+		<TextField fx:id="nameTextField" layoutX="14.0" layoutY="228.0" />
+		<Button layoutX="185.0" layoutY="228.0" mnemonicParsing="false"
+			onAction="#handleAddToTableButton" text="+" />
+		<Button layoutX="288.0" layoutY="228.0" mnemonicParsing="false"
+			onAction="#handleSubmitButton" text="submit" />
+	</children>
+</AnchorPane>

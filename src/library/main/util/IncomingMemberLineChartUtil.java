@@ -1,0 +1,53 @@
+package library.main.util;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
+
+public class IncomingMemberLineChartUtil {
+
+	private MemberDaoMYSQL memberDaoMYSQL;
+	private LineChart<String, Number> incomingMemberByMonthLineChart;
+
+	public IncomingMemberLineChartUtil(
+			LineChart<String, Number> incomingMemberByMonthLineChart,
+			MemberDaoMYSQL memberDaoMYSQL) throws SQLException {
+
+		this.memberDaoMYSQL = memberDaoMYSQL;
+		this.incomingMemberByMonthLineChart = incomingMemberByMonthLineChart;
+
+	}
+
+	public void reloadData() throws SQLException {
+		int monthInt = 1;
+		int i = 0;
+		List<String> monthList = Arrays.asList("Jan", "Feb", "Mar", "Apr",
+				"Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des");
+		CategoryAxis xAxis = new CategoryAxis();
+		xAxis.setLabel("Bulan");
+		Series incomingMemberSeries = new XYChart.Series();
+		incomingMemberSeries.setName("jumlah anggota masuk");
+		for (String monthString : monthList) {
+
+			String monthGlob = "0" + monthInt;
+			if (monthInt > 9) {
+				monthGlob = monthInt + "";
+			}
+			incomingMemberSeries.getData().add(
+					new XYChart.Data<String, Integer>(monthString,
+							this.memberDaoMYSQL.countIncomingMember(monthGlob,
+									LocalDate.now().getYear() + "")));
+			monthInt++;
+		}
+		this.incomingMemberByMonthLineChart.getData().setAll(
+				incomingMemberSeries);
+
+	}
+
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0"
+	prefWidth="461.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="library.main.controller.NewBorrowingBookController">
+	<children>
+		<Label layoutX="87.0" layoutY="85.0" text="id anggota" />
+		<TextField fx:id="memberIdTextField" layoutX="189.0"
+			layoutY="80.0" />
+		<Label layoutX="87.0" layoutY="147.0" text="id buku" />
+		<TextField fx:id="bookIdTextField" layoutX="189.0" layoutY="142.0" />
+		<Button layoutX="91.0" layoutY="212.0" mnemonicParsing="false"
+			onAction="#handleSubmitButton" text="pinjam" />
+		<Button layoutX="298.0" layoutY="212.0" mnemonicParsing="false"
+			onAction="#handleCancelButton" text="batal" />
+	</children>
+</AnchorPane>

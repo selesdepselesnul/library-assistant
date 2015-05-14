@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="246.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.BorrowingBookDetailController">
+	<children>
+		<Group layoutX="-88.0" layoutY="-280.0">
+			<children>
+				<Text fx:id="pinaltyText" layoutX="240.0" layoutY="316.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+				<Text layoutX="151.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="denda Rp." />
+			</children>
+		</Group>
+		<Button layoutX="74.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleOkButton" prefHeight="26.0" prefWidth="87.0" text="ok" />
+	</children>
+</AnchorPane>

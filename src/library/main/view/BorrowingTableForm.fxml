@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+	minWidth="-Infinity" prefHeight="576.0" prefWidth="722.0"
+	xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="library.main.controller.BorrowingTableController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+			prefWidth="100.0" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints minHeight="10.0" prefHeight="30.0"
+			vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<TableView fx:id="borrowingTableView" prefHeight="362.0"
+			prefWidth="720.0">
+			<columns>
+				<TableColumn fx:id="borrowingIdTableColumn" prefWidth="75.0"
+					text="ID" />
+				<TableColumn fx:id="memberIdTableColumn" prefWidth="174.0"
+					text="id anggota" />
+				<TableColumn fx:id="bookIdTableColumn" prefWidth="225.0"
+					text="id buku" />
+				<TableColumn fx:id="timeOfBorrowingTableColumn"
+					prefWidth="245.0" text="tanggal mulai meminjam" />
+			</columns>
+		</TableView>
+	</children>
+</GridPane>

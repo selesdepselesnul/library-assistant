@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.NewMemberFormController">
+	<children>
+		<Label layoutX="37.0" layoutY="52.0" text="Nama" />
+		<TextField fx:id="nameTextField" layoutX="114.0" layoutY="48.0" prefHeight="25.0" prefWidth="202.0" />
+		<Label layoutX="38.0" layoutY="89.0" text="e-mail" />
+		<TextField fx:id="emailTextField" layoutX="114.0" layoutY="85.0" prefHeight="25.0" prefWidth="202.0" />
+		<Label layoutX="36.0" layoutY="130.0" text="Phone" />
+		<TextField fx:id="phoneTextField" layoutX="114.0" layoutY="126.0" prefHeight="25.0" prefWidth="202.0" />
+		<Label layoutX="35.0" layoutY="212.0" text="Tgl. lahir" />
+		<DatePicker fx:id="birthDatePicker" layoutX="114.0" layoutY="208.0" prefHeight="25.0" prefWidth="202.0" />
+		<Label layoutX="34.0" layoutY="256.0" text="Alamat" />
+		<TextField fx:id="addressTextField" layoutX="114.0" layoutY="252.0" prefHeight="25.0" prefWidth="202.0" />
+		<Label layoutX="33.0" layoutY="297.0" text="Gender" />
+		<Button layoutX="366.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleSubmitButton" text="Submit" />
+		<Button layoutX="468.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
+		<Label layoutX="33.0" layoutY="172.0" text="Tmp. lahir" />
+		<TextField fx:id="birthPlaceTextField" layoutX="114.0" layoutY="168.0" prefHeight="25.0" prefWidth="202.0" />
+		<TitledPane animated="false" layoutX="114.0" layoutY="293.0" prefHeight="92.0" prefWidth="202.0" text="gender">
+			<content>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="89.0" prefWidth="200.0">
+					<children>
+						<RadioButton fx:id="maleRadioButton" layoutX="24.0" layoutY="14.0" mnemonicParsing="false" text="Laki-laki" />
+						<RadioButton fx:id="femaleRadioButton" layoutX="24.0" layoutY="43.0" mnemonicParsing="false" text="Perempuan" />
+					</children>
+				</AnchorPane>
+			</content>
+		</TitledPane>
+		<Text layoutX="407.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kata-kata error" visible="false" />
+		<ImageView fx:id="photoImageView" fitHeight="108.0" fitWidth="147.0" layoutX="393.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" />
+		<TextField fx:id="photoTextField" layoutX="425.0" layoutY="181.0" prefHeight="25.0" prefWidth="139.0" />
+		<Button layoutX="394.0" layoutY="181.0" mnemonicParsing="false" onAction="#handlePhotoButton" text="..." />
+	</children>
+</AnchorPane>

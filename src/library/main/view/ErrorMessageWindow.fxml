@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="362.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.ErrorMessageWindowController">
+	<children>
+		<Button layoutX="14.0" layoutY="284.0" mnemonicParsing="false" onAction="#handleLaterButton" text="lain kali" />
+		<Text layoutX="170.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pesan kesalahan :" />
+		<ImageView fx:id="errorImageView" fitHeight="130.0" fitWidth="141.0" layoutX="14.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" />
+		<Text fx:id="errorexplanationtext" layoutX="14.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="error explaination" textAlignment="JUSTIFY" wrappingWidth="480.0" />
+		<Button layoutX="189.0" layoutY="284.0" mnemonicParsing="false" onAction="#handleReportingButton" text="ya, laporkan kesalahan" />
+		<TextArea fx:id="errorMesageTextArea" editable="false" layoutX="170.0" layoutY="61.0" prefHeight="103.0" prefWidth="326.0" wrapText="true" />
+		<Text fx:id="quotationText" layoutX="25.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="quotation" textAlignment="JUSTIFY" wrappingWidth="480.0">
+			<font>
+				<Font name="System Bold Italic" size="9.0" />
+			</font>
+		</Text>
+	</children>
+</AnchorPane>

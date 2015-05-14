@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.MainWindowController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints maxHeight="34.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
+		<RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
+		<RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="199.0" vgrow="SOMETIMES" />
+		<RowConstraints maxHeight="239.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<Accordion prefHeight="129.0" prefWidth="527.0" GridPane.rowIndex="3">
+			<panes>
+				<TitledPane animated="false" text="Kelola anggota">
+					<content>
+						<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Button mnemonicParsing="false" onAction="#handleAddMemberButton" text="+">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<tooltip>
+										<Tooltip text="menambahkan anggota baru" />
+									</tooltip>
+									<font>
+										<Font name="System Bold" size="13.0" />
+									</font>
+								</Button>
+								<Button mnemonicParsing="false" onAction="#handleDisplayAllMembers" text="Tampil semua" GridPane.columnIndex="3">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<tooltip>
+										<Tooltip text="menampilkan semua daftar anggota" />
+									</tooltip>
+								</Button>
+								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
+									<items>
+										<MenuItem mnemonicParsing="false" onAction="#handleUpdateMenuItem" text="perbaharui" />
+										<MenuItem mnemonicParsing="false" onAction="#handleDeleteMenuItem" text="hapus" />
+										<MenuItem mnemonicParsing="false" onAction="#handlePaymentMenuItem" text="iuran" />
+										<MenuItem mnemonicParsing="false" onAction="#handleSeeBorrowingBookByMember" text="lihat peminjaman" />
+									</items>
+								</SplitMenuButton>
+								<TextField fx:id="memberIdTextField" prefHeight="25.0" prefWidth="68.0" promptText="nomor id" GridPane.columnIndex="1" />
+							</children>
+						</GridPane>
+					</content>
+					<tooltip>
+						<Tooltip text="Menu untuk mengelola anggota" />
+					</tooltip>
+				</TitledPane>
+				<TitledPane animated="false" text="Kelola buku">
+					<content>
+						<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Button mnemonicParsing="false" onAction="#handleAddBookButton" text="+">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<font>
+										<Font name="System Bold" size="13.0" />
+									</font>
+									<tooltip>
+										<Tooltip text="menambahkan stock buku baru" />
+									</tooltip>
+								</Button>
+								<Button mnemonicParsing="false" onAction="#handleDisplayAllBooks" prefHeight="26.0" prefWidth="136.0" text="Tampil semua" GridPane.columnIndex="3">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<tooltip>
+										<Tooltip text="menampilkan semua daftar semua buku yang tersedia di perpustakaan" />
+									</tooltip>
+								</Button>
+								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
+									<items>
+										<MenuItem mnemonicParsing="false" onAction="#handleBookUpdatingMenuItem" text="perbaharui" />
+										<MenuItem mnemonicParsing="false" onAction="#handleDeleteBookMenuItem" text="hapus" />
+										<MenuItem mnemonicParsing="false" onAction="#handleSeeDetailOfBookMenuItem" text="lihat detail" />
+									</items>
+								</SplitMenuButton>
+								<TextField fx:id="bookIsbnTextField" prefHeight="25.0" prefWidth="68.0" promptText="nomor isbn" GridPane.columnIndex="1" />
+							</children>
+						</GridPane>
+					</content>
+					<tooltip>
+						<Tooltip text="Menu untuk mengelola buku" />
+					</tooltip>
+				</TitledPane>
+				<TitledPane animated="false" prefHeight="171.0" prefWidth="642.0" text="Kelola peminjaman">
+					<content>
+						<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Button mnemonicParsing="false" onAction="#handleAddNewBorrowingBook" text="+">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<font>
+										<Font name="System Bold" size="13.0" />
+									</font>
+									<tooltip>
+										<Tooltip text="menambahkan peminjaman buku" />
+									</tooltip>
+								</Button>
+								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
+									<items>
+										<MenuItem mnemonicParsing="false" onAction="#handleDeleteBorrowingBookMenuItem" text="hapus" />
+									</items>
+								</SplitMenuButton>
+								<TextField fx:id="borrowingBookIdTextField" prefHeight="25.0" prefWidth="68.0" promptText="nomor peminjaman" GridPane.columnIndex="1" />
+								<Button mnemonicParsing="false" onAction="#handleDisplayingAllBorrowing" prefHeight="26.0" prefWidth="136.0" text="Tampil semua" GridPane.columnIndex="3">
+									<GridPane.margin>
+										<Insets left="40.0" />
+									</GridPane.margin>
+									<tooltip>
+										<Tooltip text="menampilkan semua daftar buku yang dipinjam beserta peminjamnya" />
+									</tooltip>
+								</Button>
+							</children>
+						</GridPane>
+					</content>
+					<tooltip>
+						<Tooltip text="Menu untuk mengelola buku yang dipinjam oleh anggota" />
+					</tooltip>
+				</TitledPane>
+			</panes>
+		</Accordion>
+		<SplitPane dividerPositions="0.49119718309859156" prefHeight="160.0" prefWidth="200.0" GridPane.rowIndex="2">
+			<items>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="291.0">
+					<children>
+						<PieChart fx:id="bookPieChart" layoutX="-166.0" layoutY="-108.0" prefHeight="257.0" prefWidth="276.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+					</children>
+				</AnchorPane>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="257.0" prefWidth="236.0">
+					<children>
+						<LineChart fx:id="incomingMemberByMonthLineChart" layoutX="-134.0" layoutY="-78.0" prefHeight="257.0" prefWidth="286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<xAxis>
+								<CategoryAxis side="BOTTOM" />
+							</xAxis>
+							<yAxis>
+								<NumberAxis side="LEFT" />
+							</yAxis>
+						</LineChart>
+					</children>
+				</AnchorPane>
+			</items>
+			<contextMenu>
+				<ContextMenu>
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#handleSeeStatisticMenuItem" text="lihat detail rangkuman" />
+					</items>
+				</ContextMenu>
+			</contextMenu>
+		</SplitPane>
+		<MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="36.0" prefWidth="641.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="File">
+					<items>
+						<Menu mnemonicParsing="false" text="buat laporan">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#handleReportAvailableBookMenuItem" text="buku" />
+							</items>
+						</Menu>
+						<MenuItem mnemonicParsing="false" onAction="#handleCloseMenuItem" text="Close" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#handleAboutMenuItem" text="About" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<GridPane GridPane.rowIndex="1">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="322.0" minWidth="10.0" prefWidth="182.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="445.0" minWidth="10.0" prefWidth="418.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Text fontSmoothingType="LCD" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Assistant -BETA-" GridPane.columnIndex="1">
+					<font>
+						<Font name="System Bold" size="24.0" />
+					</font>
+				</Text>
+				<ImageView fx:id="libararyImageView" fitHeight="78.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+					<GridPane.margin>
+						<Insets left="100.0" />
+					</GridPane.margin>
+				</ImageView>
+			</children>
+		</GridPane>
+	</children>
+</GridPane>
