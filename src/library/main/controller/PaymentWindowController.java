@@ -13,14 +13,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
+import library.main.model.MemberMonthlyPayment;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
+import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.PaymentCalculator;
 
 public class PaymentWindowController implements Initializable {
 
 	private MemberDaoMYSQL memberDaoMYSQL;
 	private long memberId;
+	private Member member;
+	private TableView<Member> memberTableView;
+	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+	private long totalMonthlyPayment;
 
 	@FXML
 	private ImageView paymentWindowImageView;
@@ -42,8 +48,7 @@ public class PaymentWindowController implements Initializable {
 
 	@FXML
 	private Button paymentButton;
-	private Member member;
-	private TableView<Member> memberTableView;
+	private long totalPenaltyPayment;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -83,8 +88,9 @@ public class PaymentWindowController implements Initializable {
 		this.monthlyPaymentTextField.setText(String.valueOf(paymentCalculator
 				.getTotalMonthlypayment()));
 		this.monthlyPaymentTextField.setDisable(true);
-		this.totalPaymentTextField.setText(String.valueOf(paymentCalculator
-				.getTotalPayment()));
+		this.totalMonthlyPayment = paymentCalculator.getTotalMonthlypayment();
+		this.totalPenaltyPayment = paymentCalculator.getTotalPenaltyPayment();
+		this.totalPaymentTextField.setText(String.valueOf(totalMonthlyPayment));
 		this.totalPaymentTextField.setDisable(true);
 	}
 
@@ -107,6 +113,20 @@ public class PaymentWindowController implements Initializable {
 				this.memberTableView.getItems().setAll(
 						this.memberDaoMYSQL.readAll());
 			}
+			
+			// pay monthly
+			this.memberMonthlyPaymentDaoMYSQL.write(new MemberMonthlyPayment(
+					this.memberId, this.totalMonthlyPayment,
+					MemberMonthlyPayment.MONTHLY));
+
+			// if also pay the penalty
+			if (this.totalMonthlyPayment > PaymentCalculator.AMOUNT_OF_MONTHLY_PAYMENT) {
+				this.memberMonthlyPaymentDaoMYSQL
+						.write(new MemberMonthlyPayment(this.memberId,
+								this.totalPenaltyPayment,
+								MemberMonthlyPayment.PENALTY));
+			}
+
 			clearPayment();
 		} catch (SQLException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
@@ -126,6 +146,11 @@ public class PaymentWindowController implements Initializable {
 
 	public void setMemberTableView(TableView<Member> memberTableView) {
 		this.memberTableView = memberTableView;
+	}
+
+	public void setMemberMonthlyPaymentDaoMYSQL(
+			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 
 }

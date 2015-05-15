@@ -121,16 +121,18 @@ public class IndividualBookDaoMYSQL {
 						+ "SET isAvailable = ? WHERE id = ?");
 		prep.setBoolean(1, individualBook.isAvailable());
 		prep.setLong(2, individualBook.getId());
+		System.out.println("Book isAvailable now = "
+				+ individualBook.isAvailable());
 		prep.execute();
 		return individualBook.getId();
 	}
 
 	public double countAvailable() throws SQLException {
-		return count("SELECT COUNT(*) FROM IndividualBook WHERE isAvailable = true");
+		return count("SELECT COUNT(*) FROM IndividualBook WHERE isAvailable = 1");
 	}
 
 	public double countNotAvailable() throws SQLException {
-		return count("SELECT COUNT(*) FROM IndividualBook WHERE isAvailable = false");
+		return count("SELECT COUNT(*) FROM IndividualBook WHERE isAvailable = 0");
 	}
 
 	private double count(String statement) throws SQLException {
@@ -174,6 +176,15 @@ public class IndividualBookDaoMYSQL {
 		resultSet.close();
 		return amount;
 
+	}
+
+	public long updateAvailability(long bookId, boolean isAvailable) throws SQLException {
+		PreparedStatement prepareStatement = this.connection.prepareStatement("UPDATE IndividualBook "
+				+ "SET isAvailable = ? " + "WHERE id = ?");
+		prepareStatement.setBoolean(1, isAvailable);
+		prepareStatement.setLong(2, bookId);
+		prepareStatement.execute();
+		return bookId;
 	}
 
 }

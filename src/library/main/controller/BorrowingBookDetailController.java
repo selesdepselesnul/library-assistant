@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import library.main.model.BookPenalty;
 import library.main.util.BookBorrowingCalculator;
+import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
 
 public class BorrowingBookDetailController implements Initializable {
@@ -22,6 +24,8 @@ public class BorrowingBookDetailController implements Initializable {
 
 	private Stage stage;
 
+	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	}
@@ -29,10 +33,6 @@ public class BorrowingBookDetailController implements Initializable {
 	public void setBorrowingDaoMYSQL(BorrowingDaoMYSQL borrowingDaoMYSQL)
 			throws SQLException {
 		this.borrowingDaoMYSQL = borrowingDaoMYSQL;
-		this.pinaltyText.setText(BookBorrowingCalculator
-				.calculatePinaltyPayment(this.borrowingDaoMYSQL,
-						this.borrowingId)
-				+ "");
 
 	}
 
@@ -47,6 +47,19 @@ public class BorrowingBookDetailController implements Initializable {
 	@FXML
 	public void handleOkButton() {
 		this.stage.close();
+	}
+
+	public void setBookPenaltyPaymentDaoMYSQL(
+			BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL) throws SQLException {
+		this.bookPenaltyPaymentDaoMYSQL = bookPenaltyPaymentDaoMYSQL;
+		long bookPenaltyAmount = BookBorrowingCalculator
+				.calculatePinaltyPayment(this.borrowingDaoMYSQL,
+						this.borrowingId);
+		this.pinaltyText.setText(bookPenaltyAmount + "");
+		if (bookPenaltyAmount > 0) {
+			this.bookPenaltyPaymentDaoMYSQL.write(new BookPenalty(
+					this.borrowingId, bookPenaltyAmount));
+		}
 	}
 
 }

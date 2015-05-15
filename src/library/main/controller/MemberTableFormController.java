@@ -25,6 +25,7 @@ import library.main.model.Member;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.MemberDaoMYSQL;
+import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.MemberPhotoDaoFS;
 import library.main.util.PaymentCalculator;
 import library.main.util.WindowLoader;
@@ -77,7 +78,7 @@ public class MemberTableFormController implements Initializable {
 
 	@FXML
 	private MenuItem deleteAllMenuItem;
-	
+
 	@FXML
 	private MenuItem deleteMenuItem;
 
@@ -93,6 +94,8 @@ public class MemberTableFormController implements Initializable {
 	private MemberDaoMYSQL memberDaoMYSQL;
 
 	private IncomingMemberLineChartUtil incomingMemberLineChartUtil;
+
+	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -149,7 +152,7 @@ public class MemberTableFormController implements Initializable {
 		this.paymentMenuItem.setDisable(isDisable);
 		this.updateMenuItem.setDisable(isDisable);
 	}
-	
+
 	@FXML
 	public void handleDeleteAllMenuItem() {
 		try {
@@ -305,6 +308,8 @@ public class MemberTableFormController implements Initializable {
 									.setMemberDaoMYSQL(memberDaoMYSQL);
 							paymentWindowController
 									.setMemberTableView(this.memberTableView);
+							paymentWindowController
+									.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
 						} catch (Exception e) {
 							new ErrorMessageWindowLoader(e.getMessage());
 						}
@@ -344,6 +349,11 @@ public class MemberTableFormController implements Initializable {
 	public void setIncomingMemberLineChartUtil(
 			IncomingMemberLineChartUtil incomingMemberLineChartUtil) {
 		this.incomingMemberLineChartUtil = incomingMemberLineChartUtil;
+	}
+
+	public void setMemberMonthlyPaymentDaoMYSQL(
+			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 
 }

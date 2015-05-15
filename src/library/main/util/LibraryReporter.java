@@ -7,7 +7,6 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.column.ColumnBuilder;
 import net.sf.dynamicreports.report.builder.column.Columns;
-import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.component.CurrentDateBuilder;
 import net.sf.dynamicreports.report.builder.component.ImageBuilder;
 import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
@@ -21,9 +20,11 @@ public class LibraryReporter {
 	private JasperReportBuilder reportBuilder;
 	private JasperViewer reportViewer;
 	private String windowTitle;
+	private boolean isEnableAutoNumber;
+	private ColumnBuilder<?, ?> numberColumn;
 
 	public LibraryReporter(String reportTitle, Collection<?> dataSource,
-			String windowTitle) throws DRException {
+			String windowTitle, boolean isEnableAutoNumber) throws DRException {
 
 		this.windowTitle = windowTitle;
 		// style
@@ -43,8 +44,7 @@ public class LibraryReporter {
 				HorizontalAlignment.CENTER);
 		ImageBuilder logoImageBuilder = DynamicReports.cmp
 				.image(ClassLoader
-						.getSystemResourceAsStream(
-								"library/main/resources/images/library_assistant.png"))
+						.getSystemResourceAsStream("library/main/resources/images/library_assistant.png"))
 				.setFixedDimension(80, 80)
 				.setStyle(
 						DynamicReports.stl.style().setHorizontalAlignment(
@@ -56,7 +56,7 @@ public class LibraryReporter {
 		currentDateBuilder.setHorizontalAlignment(HorizontalAlignment.RIGHT);
 
 		// row number
-		TextColumnBuilder<Integer> numberColumn = Columns
+		numberColumn = Columns
 				.reportRowNumberColumn("No").setFixedColumns(2)
 				.setHorizontalAlignment(HorizontalAlignment.CENTER);
 
@@ -69,18 +69,26 @@ public class LibraryReporter {
 		this.reportBuilder.setColumnTitleStyle(columnHeaderStyle);
 		this.reportBuilder.highlightDetailEvenRows();
 		this.reportBuilder.setDataSource(dataSource);
-		this.reportBuilder.addColumn(numberColumn);
+		setEnableAutoNumber(isEnableAutoNumber);
+
 
 	}
 
 	public void addColumns(ColumnBuilder<?, ?>... columns) throws DRException {
 		this.reportBuilder.columns(columns);
-		reportViewer = new JasperViewer(reportBuilder.toJasperPrint(), false);
-		reportViewer.setTitle(windowTitle);
 	}
 
-	public void show() {
+	public void show() throws DRException {
+		reportViewer = new JasperViewer(reportBuilder.toJasperPrint(), false);
+		reportViewer.setTitle(windowTitle);
 		reportViewer.setVisible(true);
+	}
+
+	private void setEnableAutoNumber(boolean isEnableAutoNumber) {
+		this.isEnableAutoNumber = isEnableAutoNumber;
+		if (this.isEnableAutoNumber) {
+			this.reportBuilder.addColumn(numberColumn);
+		}
 	}
 
 }

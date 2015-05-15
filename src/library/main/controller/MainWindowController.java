@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,7 +24,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Borrowing;
 import library.main.model.BorrowingHistory;
+import library.main.model.PaymentReportSummary;
 import library.main.util.BookDaoMYSQL;
+import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BookPieChartUtil;
 import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
@@ -29,6 +34,7 @@ import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.LibraryReporter;
 import library.main.util.MemberDaoMYSQL;
+import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 import library.main.controller.PasswordWindowController;
 
@@ -59,6 +65,10 @@ public class MainWindowController implements Initializable {
 	private BorrowingDaoMYSQL borrowingDaoMYSQL;
 
 	private IndividualBookDaoMYSQL individualBookDaoMYSQL;
+
+	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+
+	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -100,9 +110,10 @@ public class MainWindowController implements Initializable {
 						NewMemberFormController newMemberFormController = (NewMemberFormController) fxmlLoader
 								.getController();
 						newMemberFormController
+								.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+						newMemberFormController
 								.setMemberDaoMYSQL(this.memberDaoMYSQL);
 						newMemberFormController.setStage(stage);
-
 					}).show(WindowLoader.SHOW_AND_WAITING);
 
 			updateIncomingMemberLineChart();
@@ -206,8 +217,10 @@ public class MainWindowController implements Initializable {
 											memberDaoMYSQL));
 							memberTableFormController
 									.setMemberDaoMYSQL(this.memberDaoMYSQL);
+							memberTableFormController
+									.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
 						} catch (Exception e) {
-							e.printStackTrace();
+							showError(e);
 						}
 
 					}).show(WindowLoader.SHOW_AND_WAITING);
@@ -245,8 +258,9 @@ public class MainWindowController implements Initializable {
 						paymentWindowController.setMemberId(Long
 								.parseLong(this.memberIdTextField.getText()));
 						paymentWindowController
-								.setMemberDaoMYSQL(memberDaoMYSQL);
-
+								.setMemberDaoMYSQL(this.memberDaoMYSQL);
+						paymentWindowController
+								.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
 						this.memberIdTextField.clear();
 
 					}).show(WindowLoader.SHOW_AND_WAITING);
@@ -399,10 +413,20 @@ public class MainWindowController implements Initializable {
 									.setBorrowingId(idOfBorrowing);
 							borrowingBookDetailController
 									.setBorrowingDaoMYSQL(this.borrowingDaoMYSQL);
-							this.borrowingDaoMYSQL.delete(idOfBorrowing);
+							borrowingBookDetailController
+									.setBookPenaltyPaymentDaoMYSQL(this.bookPenaltyPaymentDaoMYSQL);
+							Borrowing borrowing = this.borrowingDaoMYSQL
+									.read(idOfBorrowing);
+							System.out.println("book id = "
+									+ borrowing.getBookId());
+							this.individualBookDaoMYSQL.updateAvailability(
+									borrowing.getBookId(), true);
+							this.borrowingDaoMYSQL
+									.updateTimeOfReturning(idOfBorrowing);
 							this.borrowingBookIdTextField.clear();
 							updateBookPieChart();
 						} catch (Exception e) {
+							e.printStackTrace();
 							showError(e);
 						}
 
@@ -427,7 +451,7 @@ public class MainWindowController implements Initializable {
 											.countAvailable());
 							statisticDetailController
 									.setBorrowingBook(this.borrowingDaoMYSQL
-											.count());
+											.countBorrowed());
 							statisticDetailController
 									.setAmountMemberToday(this.memberDaoMYSQL
 											.countMemberBasedOnDate(LocalDate
@@ -548,13 +572,71 @@ public class MainWindowController implements Initializable {
 
 			LibraryReporter libraryReporter;
 			libraryReporter = new LibraryReporter("Daftar Stock Buku",
-					this.bookDaoMYSQL.readAll(), "Laporan Buku");
+					this.bookDaoMYSQL.readAll(), "Laporan Buku", true);
 			libraryReporter.addColumns(titleColumn, authorsColumn, isbnColumn,
 					categoryColumn, publisherColumn, availableAmountColumn,
 					notAvailableAmountColumn, amountColumn);
 			libraryReporter.show();
 		} catch (DRException | SQLException e) {
 			showError(e);
+		}
+	}
+
+	@FXML
+	public void handlePaymentReportMenuItem() {
+
+		try {
+			LocalDate initial = LocalDate.now();
+			LocalDate start = initial.with(TemporalAdjusters.firstDayOfMonth());
+			LocalDate end = initial.with(TemporalAdjusters.lastDayOfMonth());
+
+			List<LocalDate> datesOfReporting = new ArrayList<>();
+			LocalDate date = start;
+			while (date.isBefore(end)) {
+				datesOfReporting.add(date);
+				date = date.plusDays(1);
+			}
+			datesOfReporting.add(end);
+
+			List<PaymentReportSummary> paymentReportSummarieList = new ArrayList<>();
+			datesOfReporting.forEach(localDate -> {
+				try {
+					paymentReportSummarieList.add(new PaymentReportSummary(
+							java.sql.Date.valueOf(localDate),
+							this.memberMonthlyPaymentDaoMYSQL
+									.sumMonthlyBasedOnDate(localDate),
+							this.memberMonthlyPaymentDaoMYSQL
+									.sumPenaltyBasedOnDate(localDate),
+							this.bookPenaltyPaymentDaoMYSQL
+									.sumBasedOnDate(localDate)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+
+			TextColumnBuilder<Date> timeOfPaymentColumn = Columns.column(
+					"Tgl Pembayaran", "timeOfPayment",
+					DynamicReports.type.dateType());
+			timeOfPaymentColumn
+					.setHorizontalAlignment(HorizontalAlignment.CENTER);
+			TextColumnBuilder<Long> memberMonthlyPaymentColumn = Columns
+					.column("iuran anggota", "memberMonthlyPayment",
+							DynamicReports.type.longType());
+			TextColumnBuilder<Long> memberPenaltyColumn = Columns.column(
+					"denda anggota", "memberPenalty",
+					DynamicReports.type.longType());
+			TextColumnBuilder<Long> bookPenaltyColumn = Columns
+					.column("denda buku", "bookPenalty",
+							DynamicReports.type.longType());
+			LibraryReporter libraryReporter = new LibraryReporter(
+					"Daftar Pembayaran Anggota", paymentReportSummarieList,
+					"Laporan Pembayaran Anggota", false);
+			libraryReporter.addColumns(timeOfPaymentColumn,
+					memberMonthlyPaymentColumn, memberPenaltyColumn,
+					bookPenaltyColumn);
+			libraryReporter.show();
+		} catch (DRException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -573,5 +655,15 @@ public class MainWindowController implements Initializable {
 
 	public void setBorrowingDaoMYSQL(BorrowingDaoMYSQL borrowingDaoMYSQL) {
 		this.borrowingDaoMYSQL = borrowingDaoMYSQL;
+	}
+
+	public void setMemberMonthlyPaymentDaoMYSQL(
+			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
+	}
+
+	public void setBookPenaltyPaymentDaoMYSQL(
+			BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL) {
+		this.bookPenaltyPaymentDaoMYSQL = bookPenaltyDaoMYSQL;
 	}
 }

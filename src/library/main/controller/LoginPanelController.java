@@ -19,11 +19,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.main.model.Admin;
 import library.main.util.BookDaoMYSQL;
+import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.LibraryUtil;
 import library.main.util.MemberDaoMYSQL;
+import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 
 public class LoginPanelController implements Initializable {
@@ -52,6 +54,10 @@ public class LoginPanelController implements Initializable {
 	private IndividualBookDaoMYSQL individualBookDaoMYSQL;
 
 	private BorrowingDaoMYSQL borrowingDaoMYSQL;
+
+	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+
+	private BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -103,6 +109,10 @@ public class LoginPanelController implements Initializable {
 										.setIndividualBookDaoMYSQL(this.individualBookDaoMYSQL);
 								mainWindowController
 										.setBorrowingDaoMYSQL(this.borrowingDaoMYSQL);
+								mainWindowController
+										.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+								mainWindowController
+										.setBookPenaltyPaymentDaoMYSQL(this.bookPenaltyDaoMYSQL);
 								mainWindowController.init();
 
 								this.loginPanelStage.close();
@@ -145,6 +155,17 @@ public class LoginPanelController implements Initializable {
 
 	public void setBorrowingDaoMYSQL(BorrowingDaoMYSQL borrowingDaoMYSQL) {
 		this.borrowingDaoMYSQL = borrowingDaoMYSQL;
+	}
+
+	public void setMemberMonthlyPaymentDaoMYSQL(
+			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
+	}
+	
+
+	public void setBookPenaltyPaymentDaoMYSQL(
+			BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL) {
+		this.bookPenaltyDaoMYSQL = bookPenaltyDaoMYSQL;
 	}
 
 }

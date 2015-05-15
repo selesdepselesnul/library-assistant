@@ -43,19 +43,24 @@ public class BorrowingDaoMYSQL {
 									+ "memberId BIGINT NOT NULL, "
 									+ "bookId BIGINT NOT NULL, "
 									+ "timeOfBorrowing timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+									+ "timeOfReturning timestamp NULL DEFAULT NULL, "
 									+ "FOREIGN KEY (memberId) REFERENCES Member(id), "
 									+ "FOREIGN KEY (bookId) REFERENCES IndividualBook(id) )");
 		}
 	}
 
 	public Borrowing read(long id) throws SQLException {
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SELECT * FROM Borrowing");
+		PreparedStatement prepareStatement = this.connection
+				.prepareStatement("SELECT * FROM Borrowing WHERE id = ?");
+		prepareStatement.setLong(1, id);
+		ResultSet resultSet = prepareStatement.executeQuery();
 		resultSet.next();
 		Borrowing borrowing = new Borrowing(resultSet.getLong("memberId"),
 				resultSet.getLong("bookId"), resultSet.getDate(
 						"timeOfBorrowing").toLocalDate());
 		borrowing.setId(resultSet.getLong("id"));
+		System.out.println("book id inside read borrowing = "
+				+ resultSet.getLong("bookId"));
 		resultSet.close();
 		return borrowing;
 	}
@@ -87,8 +92,12 @@ public class BorrowingDaoMYSQL {
 
 	public List<Borrowing> readAll() throws SQLException {
 		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SELECT * FROM Borrowing");
-
+				"SELECT b.id, b.memberId, b.bookId, b.timeOfBorrowing "
+						+ "FROM Borrowing AS b "
+						+ "INNER JOIN IndividualBook AS i "
+						+ "ON b.bookId = i.id " 
+						+ "WHERE i.isAvailable = 0 "
+						+ "AND b.timeOfReturning IS NULL");
 		List<Borrowing> borrowingList = new ArrayList<>();
 		while (resultSet.next()) {
 			Borrowing borrowing = new Borrowing(resultSet.getLong("memberId"),
@@ -101,26 +110,33 @@ public class BorrowingDaoMYSQL {
 		return borrowingList;
 	}
 
-	public long delete(long borrowingId) throws SQLException {
-		Borrowing borrowing = read(borrowingId);
-		long bookId = borrowing.getBookId();
-		PreparedStatement prep = this.connection
-				.prepareStatement("DELETE FROM Borrowing WHERE id = ?");
-		prep.setLong(1, borrowingId);
-		prep.execute();
-
-		IndividualBook individualBook = this.individualBookDaoMysql
-				.read(bookId);
-		individualBook.setAvailable(true);
-		this.individualBookDaoMysql.update(individualBook);
-
-		return borrowingId;
-	}
+	// public long delete(long borrowingId) throws SQLException {
+	// Borrowing borrowing = read(borrowingId);
+	// long bookId = borrowing.getBookId();
+	// // PreparedStatement prep = this.connection
+	// // .prepareStatement("UPDATE Borrowing " + "SET isReturned = 1 "
+	// // + " WHERE id = ?");
+	// // prep.setLong(1, borrowingId);
+	// // prep.execute();
+	//
+	// IndividualBook individualBook = this.individualBookDaoMysql
+	// .read(bookId);
+	// individualBook.setAvailable(true);
+	// this.individualBookDaoMysql.update(individualBook);
+	//
+	// return borrowingId;
+	// }
 
 	public List<BorrowingHistory> readBasedOnMemberId(long memberId)
 			throws SQLException {
 		PreparedStatement prep = this.connection
-				.prepareStatement("SELECT bookId, timeOfBorrowing FROM Borrowing WHERE memberId = ?");
+				.prepareStatement("SELECT b.bookId, b.timeOfBorrowing "
+						+ "FROM Borrowing AS b "
+						+ "INNER JOIN IndividualBook AS i "
+						+ "ON b.bookId = i.id " 
+						+ "WHERE i.isAvailable = 0 "
+						+ "AND b.memberId = ? "
+						+ "AND b.timeOfReturning IS NULL");
 		prep.setLong(1, memberId);
 		ResultSet resultSet = prep.executeQuery();
 
@@ -137,12 +153,25 @@ public class BorrowingDaoMYSQL {
 		return borrowingHistoryList;
 	}
 
-	public int count() throws SQLException {
+	public int countBorrowed() throws SQLException {
 		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SELECT COUNT(*) FROM Borrowing;");
+				"SELECT COUNT(*) FROM Borrowing AS b "
+						+ "INNER JOIN IndividualBook AS i "
+						+ "ON b.bookId = i.id " 
+						+ "WHERE i.isAvailable = 0");
 		resultSet.next();
 		int count = resultSet.getInt(1);
 		return count;
+	}
+
+	public long updateTimeOfReturning(long idOfBorrowing) throws SQLException {
+		PreparedStatement prepareStatement = this.connection
+				.prepareStatement("UPDATE Borrowing "
+						+ "SET timeOfReturning = NOW()" + "WHERE id = ?");
+		prepareStatement.setLong(1, idOfBorrowing);
+		prepareStatement.execute();
+		return idOfBorrowing;
+
 	}
 
 }

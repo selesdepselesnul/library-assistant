@@ -7,11 +7,13 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import library.main.controller.LoginPanelController;
 import library.main.util.BookDaoMYSQL;
+import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MYSQLConnector;
 import library.main.util.MemberDaoMYSQL;
+import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 
 public class Main extends Application {
@@ -46,6 +48,12 @@ public class Main extends Application {
 									.setBorrowingDaoMYSQL(new BorrowingDaoMYSQL(
 											connectionWithSelectedDBase,
 											individualBookDaoMYSQL));
+							loginPanelController
+									.setMemberMonthlyPaymentDaoMYSQL(new MemberMonthlyPaymentDaoMYSQL(
+											connectionWithSelectedDBase));
+							loginPanelController
+									.setBookPenaltyPaymentDaoMYSQL(new BookPenaltyDaoMYSQL(
+											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
 							new ErrorMessageWindowLoader(e.getMessage()).show();
