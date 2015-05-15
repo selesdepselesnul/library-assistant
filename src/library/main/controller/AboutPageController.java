@@ -33,7 +33,7 @@ public class AboutPageController implements Initializable {
 	@FXML
 	private void handleLicenseButton() {
 		try {
-			writeToAboutTextArea("library/main/resources/license.txt");
+			writeToAboutTextArea("library/main/resources/text/license.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class AboutPageController implements Initializable {
 	@FXML
 	private void handleCreditsButton() {
 		try {
-			writeToAboutTextArea("library/main/resources/developer.txt");
+			writeToAboutTextArea("library/main/resources/text/developer.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

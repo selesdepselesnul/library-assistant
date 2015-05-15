@@ -39,9 +39,9 @@ public class ErrorMessageWindowController implements Initializable {
 							ClassLoader
 									.getSystemResourceAsStream("library/main/resources/images/error_icon.jpg")));
 			this.quotationText
-					.setText(readMessage("library/main/resources/quotations_about_mistakes"));
+					.setText(readMessage("library/main/resources/text/quotations_about_mistakes.txt"));
 			this.errorexplanationtext
-					.setText(readMessage("library/main/resources/error_explanation"));
+					.setText(readMessage("library/main/resources/text/error_explanation.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -2,7 +2,6 @@ package library.main.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -17,16 +16,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import library.main.model.Admin;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
-import library.main.util.LibraryUtil;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
+import library.main.util.configuration.Admin;
 
 public class LoginPanelController implements Initializable {
 
@@ -83,15 +81,14 @@ public class LoginPanelController implements Initializable {
 
 	@FXML
 	public void handleOkButton() {
-		Properties prop = new Properties();
-		try {
-			prop.load(ClassLoader
-					.getSystemResourceAsStream("library/main/resources/admin.properties"));
-			LibraryUtil libraryUtil = new LibraryUtil(prop);
-			Admin admin = new Admin(this.usernameTextField.getText(),
-					this.passwordField.getText());
+		// prop.load(ClassLoader
+		// .getSystemResourceAsStream("library/main/resources/admin.properties"));
+		// LibraryUtil libraryUtil = new LibraryUtil(prop);
+		String username = this.usernameTextField.getText();
+		String password = this.passwordField.getText();
 
-			if (libraryUtil.isValid(admin)) {
+		if (Admin.isValid(username, password)) {
+			try {
 				new WindowLoader(
 						"library/main/view/MainWindow.fxml",
 						"Library Assistant -BETA-",
@@ -126,12 +123,11 @@ public class LoginPanelController implements Initializable {
 							}
 
 						}).show(WindowLoader.SHOW_AND_WAITING);
-			} else {
-				this.accountErrorLabel.setVisible(true);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-		} catch (IOException | ClassNotFoundException e) {
-			new ErrorMessageWindowLoader(e.getMessage()).show();
+		} else {
+			this.accountErrorLabel.setVisible(true);
 		}
 	}
 
@@ -161,7 +157,6 @@ public class LoginPanelController implements Initializable {
 			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
-	
 
 	public void setBookPenaltyPaymentDaoMYSQL(
 			BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL) {

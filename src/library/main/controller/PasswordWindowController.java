@@ -1,8 +1,6 @@
 package library.main.controller;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -12,9 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import library.main.model.Admin;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.LibraryUtil;
+import library.main.util.configuration.Admin;
 
 public class PasswordWindowController implements Initializable {
 
@@ -39,19 +35,12 @@ public class PasswordWindowController implements Initializable {
 
 	@FXML
 	public void handleSubmitButton() {
-		Properties prop = new Properties();
-		try {
-			prop.load(ClassLoader
-					.getSystemResourceAsStream("library/main/resources/admin.properties"));
-			Admin admin = new Admin("root", this.passwordField.getText());
-			if (new LibraryUtil(prop).isValid(admin)) {
-				this.passwordNotMatchedText.setVisible(false);
-				System.exit(0);
-			} else {
-				this.passwordNotMatchedText.setVisible(true);
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			new ErrorMessageWindowLoader(e.getMessage()).show();
+		String password = passwordField.getText();
+		if (Admin.isValid(Admin.getUsername(), password)) {
+			this.passwordNotMatchedText.setVisible(false);
+			System.exit(0);
+		} else {
+			this.passwordNotMatchedText.setVisible(true);
 		}
 	}
 

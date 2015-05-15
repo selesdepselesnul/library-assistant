@@ -18,6 +18,7 @@ import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.PaymentCalculator;
+import library.main.util.configuration.Calculation;
 
 public class PaymentWindowController implements Initializable {
 
@@ -120,7 +121,7 @@ public class PaymentWindowController implements Initializable {
 					MemberMonthlyPayment.MONTHLY));
 
 			// if also pay the penalty
-			if (this.totalMonthlyPayment > PaymentCalculator.AMOUNT_OF_MONTHLY_PAYMENT) {
+			if (this.totalMonthlyPayment > Calculation.getMemberMonthlyPayment()) {
 				this.memberMonthlyPaymentDaoMYSQL
 						.write(new MemberMonthlyPayment(this.memberId,
 								this.totalPenaltyPayment,

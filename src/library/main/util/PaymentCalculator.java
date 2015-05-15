@@ -5,10 +5,11 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
 import library.main.model.Member;
+import library.main.util.configuration.Calculation;
 
 public class PaymentCalculator {
-	public static final long AMOUNT_OF_PINALTY = 5000;
-	public static final long AMOUNT_OF_MONTHLY_PAYMENT = 10000;
+//	public static final long AMOUNT_OF_PINALTY = 5000;
+//	public static final long AMOUNT_OF_MONTHLY_PAYMENT = 10000;
 	private long totalPenaltyPayment;
 	private long totalMonthlypayment;
 	private long totalPayment;
@@ -38,12 +39,12 @@ public class PaymentCalculator {
 		if (monthsSinceLastPayment >= 1) {
 			if (period.getDays() > 0) {
 				this.totalPenaltyPayment = monthsSinceLastPayment
-						* AMOUNT_OF_PINALTY;
+						* Calculation.getMemberPenaltyPayment();
 			} else {
 				this.totalPenaltyPayment = 0L;
 			}
 			this.totalMonthlypayment = monthsSinceLastPayment
-					* AMOUNT_OF_MONTHLY_PAYMENT;
+					* Calculation.getMemberMonthlyPayment();
 			this.totalPayment = this.totalMonthlypayment
 					+ this.totalPenaltyPayment;
 		}

@@ -28,7 +28,7 @@ public class Main extends Application {
 
 							Properties sqlProperties = new Properties();
 							sqlProperties.load(ClassLoader
-									.getSystemResourceAsStream("library/main/resources/sql.properties"));
+									.getSystemResourceAsStream("library/main/resources/properties/sql.properties"));
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
 							loginPanelController

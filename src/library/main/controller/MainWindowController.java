@@ -640,6 +640,17 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	@FXML
+	public void handleConfigurationMenuItem() {
+		try {
+			new WindowLoader("library/main/view/LibraryConfigurationWindow.fxml",
+					"Konfigurasi", (fxmlLoader, stage) -> {
+					}).show(WindowLoader.SHOW_AND_WAITING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void setToCenter(TextColumnBuilder<?> column) {
 		column.setHorizontalAlignment(HorizontalAlignment.CENTER);
 	}
