@@ -9,6 +9,7 @@ public class Calculation {
 
 	private static long memberMonthlyPayment;
 	private static long memberPenaltyPayment;
+	private static long memberMaxDaysOfPayment;
 	private static long bookPenaltyPayment;
 	private static long bookMaxDaysOfBorrowing;
 	private static Connection connection;
@@ -31,11 +32,12 @@ public class Calculation {
 					"CREATE TABLE LibraryCalculation ( " + "id TINYINT, "
 							+ "memberMonthlyPayment BIGINT NOT NULL, "
 							+ "memberPenaltyPayment BIGINT NOT NULL, "
+							+ "memberMaxDaysOfPayment BIGINT NOT NULL, "
 							+ "bookPenaltyPayment BIGINT NOT NULL, "
 							+ "bookMaxDaysOfBorrowing BIGINT NOT NULL )");
 			Calculation.connection.createStatement().execute(
 					"INSERT INTO LibraryCalculation "
-							+ "VALUES (1, 10000, 5000, 500, 7)");
+							+ "VALUES (1, 10000, 5000, 365, 500, 7)");
 
 		}
 
@@ -45,6 +47,7 @@ public class Calculation {
 
 		memberMonthlyPayment = resultSet.getLong("memberMonthlyPayment");
 		memberPenaltyPayment = resultSet.getLong("memberPenaltyPayment");
+		memberMaxDaysOfPayment = resultSet.getLong("memberMaxDaysOfPayment");
 		bookPenaltyPayment = resultSet.getLong("bookPenaltyPayment");
 		bookMaxDaysOfBorrowing = resultSet.getLong("bookMaxDaysOfBorrowing");
 	}
@@ -75,6 +78,12 @@ public class Calculation {
 		Calculation.bookPenaltyPayment = bookPenaltyPayment;
 	}
 
+	public static void setMemberMaxDaysOfPayment(long memberMaxDaysOfPayment)
+			throws SQLException {
+		doUpdate("memberMaxDaysOfPayment", memberMaxDaysOfPayment);
+		Calculation.memberMaxDaysOfPayment = memberMaxDaysOfPayment;
+	}
+
 	public static long getBookMaxDaysOfBorrowing() {
 		return bookMaxDaysOfBorrowing;
 	}
@@ -96,6 +105,10 @@ public class Calculation {
 						+ columnName + " = ? WHERE id = 1");
 		prepareStatement.setLong(1, value);
 		prepareStatement.execute();
+	}
+
+	public static long getMemberMaxDaysOfPayment() {
+		return memberMaxDaysOfPayment;
 	}
 
 }

@@ -9,18 +9,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.PaymentWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.main.controller.PaymentWindowController">
 	<children>
 		<Group layoutX="19.0" layoutY="126.0">
 			<children>
-				<Text layoutX="17.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bulan " />
+				<Text layoutX="17.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="jumlah hari sejak bayar" />
 				<Text layoutX="17.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah iuran" />
 				<Text layoutX="17.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah denda" />
 				<Text layoutX="17.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" />
 				<TextField fx:id="idTextField" layoutX="195.6728515625" />
-				<TextField fx:id="monthsSinceLastPayTextField" layoutX="195.6728515625" layoutY="40.0" />
-				<TextField fx:id="monthlyPaymentTextField" layoutX="195.6728515625" layoutY="74.0" />
-				<TextField fx:id="penaltyPaymentTextField" layoutX="195.6728515625" layoutY="109.0" />
+				<TextField fx:id="daysSinceLastMemberPaymentTextField" layoutX="195.6728515625" layoutY="40.0" />
+				<TextField fx:id="totalRoutinePaymentTextField" layoutX="195.6728515625" layoutY="74.0" />
+				<TextField fx:id="totalPenaltyPaymentTextField" layoutX="195.6728515625" layoutY="109.0" />
 				<Text layoutX="17.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jumlah pembayaran" />
 				<TextField fx:id="totalPaymentTextField" layoutX="194.6728515625" layoutY="147.0" />
 			</children>

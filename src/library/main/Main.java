@@ -17,7 +17,7 @@ import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MYSQLConnector;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 
 public class Main extends Application {
@@ -63,22 +63,15 @@ public class Main extends Application {
 											connectionWithSelectedDBase,
 											individualBookDaoMYSQL));
 							loginPanelController
-									.setMemberMonthlyPaymentDaoMYSQL(new MemberMonthlyPaymentDaoMYSQL(
+									.setMemberMonthlyPaymentDaoMYSQL(new MemberPaymentDaoMYSQL(
 											connectionWithSelectedDBase));
 							loginPanelController
 									.setBookPenaltyPaymentDaoMYSQL(new BookPenaltyDaoMYSQL(
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
-							new ErrorMessageWindowLoader(
-									"File sql.properties didalam folder resources/properties "
-											+ "tidak ditemukan, "
-											+ "harap buat terlebih dahulu, "
-											+ "dengan format sebagai berikut :\n\n"
-											+ "username=username mysql\n"
-											+ "password=password myql\n"
-											+ "port=port untuk mengakses mysql\n"
-											+ "hostname=nama hostname\n").show();
+//							new ErrorMessageWindowLoader(e.getMessage());
+							e.printStackTrace();
 							System.exit(1);
 						}
 					}).show(WindowLoader.SHOW_ONLY);

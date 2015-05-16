@@ -7,13 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import library.main.model.MemberMonthlyPayment;
+import library.main.model.MemberPayment;
 
-public class MemberMonthlyPaymentDaoMYSQL {
+public class MemberPaymentDaoMYSQL {
 
 	private Connection connection;
 
-	public MemberMonthlyPaymentDaoMYSQL(Connection connection)
+	public MemberPaymentDaoMYSQL(Connection connection)
 			throws SQLException {
 		this.connection = connection;
 		this.connection.setSchema("library");
@@ -45,7 +45,7 @@ public class MemberMonthlyPaymentDaoMYSQL {
 
 	}
 
-	public long write(MemberMonthlyPayment memberMonthlyPayment)
+	public long write(MemberPayment memberMonthlyPayment)
 			throws SQLException {
 		PreparedStatement prepareStatement = this.connection
 				.prepareStatement("INSERT INTO MemberMonthlyPayment (memberId, amount, paymentMode) "
@@ -64,7 +64,7 @@ public class MemberMonthlyPaymentDaoMYSQL {
 	}
 
 	public long sumMonthlyBasedOnDate(LocalDate localDate) throws SQLException {
-		return sumPayment(localDate, MemberMonthlyPayment.MONTHLY);
+		return sumPayment(localDate, MemberPayment.MONTHLY);
 	}
 
 	private long sumPayment(LocalDate localDate, String paymentMode)
@@ -84,7 +84,7 @@ public class MemberMonthlyPaymentDaoMYSQL {
 	}
 
 	public long sumPenaltyBasedOnDate(LocalDate localDate) throws SQLException {
-		return sumPayment(localDate, MemberMonthlyPayment.PENALTY);
+		return sumPayment(localDate, MemberPayment.PENALTY);
 	}
 
 	public void deleteBasedOnMemberId(long memberId) throws SQLException {

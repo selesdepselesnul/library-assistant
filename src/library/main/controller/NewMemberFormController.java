@@ -19,10 +19,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import library.main.model.Member;
-import library.main.model.MemberMonthlyPayment;
+import library.main.model.MemberPayment;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.MemberPhotoDaoFS;
 
 public class NewMemberFormController implements Initializable {
@@ -73,7 +73,7 @@ public class NewMemberFormController implements Initializable {
 
 	private int selectedIndex;
 
-	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -116,7 +116,7 @@ public class NewMemberFormController implements Initializable {
 						.insertPhotoMember(this.sourcePhotoPath));
 				this.memberDaoMYSQL.update(member);
 				this.memberMonthlyPaymentDaoMYSQL
-				.write(new MemberMonthlyPayment(member.getId()));
+				.write(new MemberPayment(member.getId()));
 			} else {
 				Member oldMember = this.memberDaoMYSQL.read(this.memberId);
 				member.setId(oldMember.getId());
@@ -217,7 +217,7 @@ public class NewMemberFormController implements Initializable {
 	}
 
 	public void setMemberMonthlyPaymentDaoMYSQL(
-			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 

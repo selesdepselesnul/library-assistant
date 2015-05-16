@@ -13,11 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
-import library.main.model.MemberMonthlyPayment;
+import library.main.model.MemberPayment;
 import library.main.util.Calculation;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.PaymentCalculator;
 
 public class PaymentWindowController implements Initializable {
@@ -26,8 +26,7 @@ public class PaymentWindowController implements Initializable {
 	private long memberId;
 	private Member member;
 	private TableView<Member> memberTableView;
-	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
-	private long totalMonthlyPayment;
+	private MemberPaymentDaoMYSQL memberPaymentDaoMYSQL;
 
 	@FXML
 	private ImageView paymentWindowImageView;
@@ -36,20 +35,20 @@ public class PaymentWindowController implements Initializable {
 	private TextField idTextField;
 
 	@FXML
-	private TextField monthsSinceLastPayTextField;
+	private TextField daysSinceLastMemberPaymentTextField;
 
 	@FXML
-	private TextField monthlyPaymentTextField;
+	private TextField totalRoutinePaymentTextField;
 
 	@FXML
-	private TextField penaltyPaymentTextField;
+	private TextField totalPenaltyPaymentTextField;
 
 	@FXML
 	private TextField totalPaymentTextField;
 
 	@FXML
 	private Button paymentButton;
-	private long totalPenaltyPayment;
+	private PaymentCalculator paymentCalculator;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -72,27 +71,31 @@ public class PaymentWindowController implements Initializable {
 	}
 
 	private void decidePayment() {
-		PaymentCalculator paymentCalculator = new PaymentCalculator(member);
+		paymentCalculator = new PaymentCalculator(member);
 
-		if (paymentCalculator.getMonthsSinceLastPayment() == 0) {
+		if (paymentCalculator.getDaysSinceLastPayment() == 0) {
 			this.paymentButton.setDisable(true);
 		}
 
 		this.idTextField.setText(String.valueOf(this.memberId));
 		this.idTextField.setDisable(true);
-		this.monthsSinceLastPayTextField.setText(String
-				.valueOf(paymentCalculator.getMonthsSinceLastPayment()));
-		this.monthsSinceLastPayTextField.setDisable(true);
-		this.penaltyPaymentTextField.setText(String.valueOf(paymentCalculator
-				.getTotalPenaltyPayment()));
-		this.penaltyPaymentTextField.setDisable(true);
-		this.monthlyPaymentTextField.setText(String.valueOf(paymentCalculator
-				.getTotalMonthlypayment()));
-		this.monthlyPaymentTextField.setDisable(true);
-		this.totalMonthlyPayment = paymentCalculator.getTotalMonthlypayment();
-		this.totalPenaltyPayment = paymentCalculator.getTotalPenaltyPayment();
-		this.totalPaymentTextField.setText(String.valueOf(totalMonthlyPayment));
+
+		this.totalPenaltyPaymentTextField.setText(String
+				.valueOf(paymentCalculator.getTotalPenaltyPayment()));
+		this.totalPenaltyPaymentTextField.setDisable(true);
+
+		this.totalRoutinePaymentTextField.setText(String
+				.valueOf(paymentCalculator.getTotalRoutinePayment()));
+		this.totalRoutinePaymentTextField.setDisable(true);
+
+		this.totalPaymentTextField.setText(String.valueOf(paymentCalculator
+				.getTotalRoutinePayment()
+				+ paymentCalculator.getTotalPenaltyPayment()));
 		this.totalPaymentTextField.setDisable(true);
+
+		this.daysSinceLastMemberPaymentTextField.setText(String
+				.valueOf(paymentCalculator.getDaysSinceLastPayment()));
+		this.daysSinceLastMemberPaymentTextField.setDisable(true);
 	}
 
 	public void setMemberDaoMYSQL(MemberDaoMYSQL memberDaoMYSQL) {
@@ -114,18 +117,19 @@ public class PaymentWindowController implements Initializable {
 				this.memberTableView.getItems().setAll(
 						this.memberDaoMYSQL.readAll());
 			}
-			
+
 			// pay monthly
-			this.memberMonthlyPaymentDaoMYSQL.write(new MemberMonthlyPayment(
-					this.memberId, this.totalMonthlyPayment,
-					MemberMonthlyPayment.MONTHLY));
+			this.memberPaymentDaoMYSQL.write(new MemberPayment(this.memberId,
+					this.paymentCalculator.getTotalRoutinePayment(),
+					MemberPayment.MONTHLY));
 
 			// if also pay the penalty
-			if (this.totalMonthlyPayment > Calculation.getMemberMonthlyPayment()) {
-				this.memberMonthlyPaymentDaoMYSQL
-						.write(new MemberMonthlyPayment(this.memberId,
-								this.totalPenaltyPayment,
-								MemberMonthlyPayment.PENALTY));
+			if (this.paymentCalculator.getTotalRoutinePayment() > Calculation
+					.getMemberMonthlyPayment()) {
+				this.memberPaymentDaoMYSQL.write(new MemberPayment(
+						this.memberId, this.paymentCalculator
+								.getTotalRoutinePayment(),
+						MemberPayment.PENALTY));
 			}
 
 			clearPayment();
@@ -135,9 +139,9 @@ public class PaymentWindowController implements Initializable {
 	}
 
 	private void clearPayment() {
-		this.monthsSinceLastPayTextField.setText("0");
-		this.monthlyPaymentTextField.setText("0");
-		this.penaltyPaymentTextField.setText("0");
+		this.daysSinceLastMemberPaymentTextField.setText("0");
+		this.totalRoutinePaymentTextField.setText("0");
+		this.totalPenaltyPaymentTextField.setText("0");
 		this.totalPaymentTextField.setText("0");
 	}
 
@@ -150,8 +154,8 @@ public class PaymentWindowController implements Initializable {
 	}
 
 	public void setMemberMonthlyPaymentDaoMYSQL(
-			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
-		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
+			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+		this.memberPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 
 }

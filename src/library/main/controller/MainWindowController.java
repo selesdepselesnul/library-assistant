@@ -35,7 +35,7 @@ import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.LibraryReporter;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 import library.main.controller.PasswordWindowController;
 
@@ -67,7 +67,7 @@ public class MainWindowController implements Initializable {
 
 	private IndividualBookDaoMYSQL individualBookDaoMYSQL;
 
-	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
 
@@ -680,7 +680,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	public void setMemberMonthlyPaymentDaoMYSQL(
-			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 

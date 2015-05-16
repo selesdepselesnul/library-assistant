@@ -53,7 +53,7 @@ public class AdminDaoMYSQL {
 				"SELECT * FROM Admin");
 		resultSet.next();
 		Admin admin = new Admin(resultSet.getString("username"),
-				resultSet.getString("password"));
+				resultSet.getString("password"), resultSet.getString("email"));
 		resultSet.close();
 		return admin;
 	}

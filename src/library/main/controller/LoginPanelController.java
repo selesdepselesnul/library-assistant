@@ -25,7 +25,7 @@ import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
 
 public class LoginPanelController implements Initializable {
@@ -55,7 +55,7 @@ public class LoginPanelController implements Initializable {
 
 	private BorrowingDaoMYSQL borrowingDaoMYSQL;
 
-	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	private BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL;
 
@@ -161,7 +161,7 @@ public class LoginPanelController implements Initializable {
 	}
 
 	public void setMemberMonthlyPaymentDaoMYSQL(
-			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 

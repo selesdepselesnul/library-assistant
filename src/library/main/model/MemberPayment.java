@@ -2,7 +2,7 @@ package library.main.model;
 
 import library.main.util.Calculation;
 
-public class MemberMonthlyPayment {
+public class MemberPayment {
 
 	private long memberId;
 	private long amount;
@@ -11,13 +11,13 @@ public class MemberMonthlyPayment {
 	public static final String MONTHLY = "monthly";
 	public static final String PENALTY = "penalty";
 
-	public MemberMonthlyPayment(long memberId) {
+	public MemberPayment(long memberId) {
 		this.memberId = memberId;
 		this.amount = Calculation.getMemberMonthlyPayment();
-		this.paymentMode = MemberMonthlyPayment.MONTHLY;
+		this.paymentMode = MemberPayment.MONTHLY;
 	}
 
-	public MemberMonthlyPayment(long memberId, long amount, String paymentMode) {
+	public MemberPayment(long memberId, long amount, String paymentMode) {
 		this.memberId = memberId;
 		this.amount = amount;
 		this.paymentMode = paymentMode;

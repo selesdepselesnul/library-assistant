@@ -1,51 +1,56 @@
 package library.main.util;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
 import library.main.model.Member;
 
 public class PaymentCalculator {
 	private long totalPenaltyPayment;
-	private long totalMonthlypayment;
+	private long routinePayment;
 	private long totalPayment;
-	private long monthsSinceLastPayment;
+	private long daysSinceLastPayment;
 
 	public long getTotalPenaltyPayment() {
 		return totalPenaltyPayment;
 	}
 
-	public long getTotalMonthlypayment() {
-		return totalMonthlypayment;
+	public long getTotalRoutinePayment() {
+		return routinePayment;
 	}
 
 	public long getTotalPayment() {
 		return totalPayment;
 	}
-	
-	public long getMonthsSinceLastPayment() {
-		return monthsSinceLastPayment;
-	}
 
 	public PaymentCalculator(Member member) {
 		LocalDate lastPayment = member.getTimeOfLastPayment();
-		monthsSinceLastPayment = ChronoUnit.MONTHS.between(lastPayment,
+		daysSinceLastPayment = ChronoUnit.DAYS.between(lastPayment,
 				LocalDate.now());
-		Period period = Period.between(lastPayment, LocalDate.now());
-		if (monthsSinceLastPayment >= 1) {
-			if (period.getDays() > 0) {
-				this.totalPenaltyPayment = monthsSinceLastPayment
+		System.out.println(daysSinceLastPayment);
+
+		if (daysSinceLastPayment >= Calculation.getMemberMaxDaysOfPayment()) {
+			if (daysSinceLastPayment > Calculation.getMemberMaxDaysOfPayment()) {
+				this.totalPenaltyPayment = (daysSinceLastPayment - Calculation
+						.getMemberMaxDaysOfPayment())
 						* Calculation.getMemberPenaltyPayment();
+				System.out.println("total penalty payment = "
+						+ this.totalPenaltyPayment);
 			} else {
 				this.totalPenaltyPayment = 0L;
 			}
-			this.totalMonthlypayment = monthsSinceLastPayment
+			System.out.println(daysSinceLastPayment
+					/ Calculation.getMemberMaxDaysOfPayment());
+			this.routinePayment = (daysSinceLastPayment / Calculation
+					.getMemberMaxDaysOfPayment())
 					* Calculation.getMemberMonthlyPayment();
-			this.totalPayment = this.totalMonthlypayment
-					+ this.totalPenaltyPayment;
+			this.totalPayment = this.routinePayment + this.totalPenaltyPayment;
 		}
 
+	}
+
+	public long getDaysSinceLastPayment() {
+		return daysSinceLastPayment;
 	}
 
 }

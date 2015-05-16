@@ -25,7 +25,7 @@ import library.main.model.Member;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberMonthlyPaymentDaoMYSQL;
+import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.MemberPhotoDaoFS;
 import library.main.util.PaymentCalculator;
 import library.main.util.WindowLoader;
@@ -95,7 +95,7 @@ public class MemberTableFormController implements Initializable {
 
 	private IncomingMemberLineChartUtil incomingMemberLineChartUtil;
 
-	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
+	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -339,10 +339,10 @@ public class MemberTableFormController implements Initializable {
 
 	private Predicate<Member> decidePaymentStatusPredicate(String paymentStatus) {
 		Predicate<Member> predicate = member -> new PaymentCalculator(member)
-				.getMonthsSinceLastPayment() > 0;
+				.getDaysSinceLastPayment() > 0;
 		if (paymentStatus.equalsIgnoreCase("sudah")) {
 			predicate = member -> new PaymentCalculator(member)
-					.getMonthsSinceLastPayment() == 0;
+					.getDaysSinceLastPayment() == 0;
 		}
 		return predicate;
 	}
@@ -353,7 +353,7 @@ public class MemberTableFormController implements Initializable {
 	}
 
 	public void setMemberMonthlyPaymentDaoMYSQL(
-			MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
+			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 

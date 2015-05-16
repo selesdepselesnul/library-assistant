@@ -73,7 +73,7 @@ public class MemberDaoMYSQL {
 	public long delete(long id) throws SQLException {
 
 		final String DELETED_EXISTING_MEMBER = "DELETE FROM Member WHERE id = ? ";
-		new MemberMonthlyPaymentDaoMYSQL(connection).deleteBasedOnMemberId(id);
+		new MemberPaymentDaoMYSQL(connection).deleteBasedOnMemberId(id);
 		this.preparedStat = this.connection
 				.prepareStatement(DELETED_EXISTING_MEMBER);
 		this.preparedStat.setLong(1, id);
@@ -172,7 +172,7 @@ public class MemberDaoMYSQL {
 	}
 
 	public void deleteAll() throws SQLException {
-		new MemberMonthlyPaymentDaoMYSQL(connection).deleteAll();
+		new MemberPaymentDaoMYSQL(connection).deleteAll();
 		this.connection.createStatement().execute("DELETE FROM Member");
 	}
 
