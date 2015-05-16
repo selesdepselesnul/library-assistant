@@ -67,11 +67,13 @@ public class MemberMonthlyPaymentDaoMYSQL {
 		return sumPayment(localDate, MemberMonthlyPayment.MONTHLY);
 	}
 
-	private long sumPayment(LocalDate localDate, String paymentMode) throws SQLException {
-		PreparedStatement prepareStatement = this.connection.prepareStatement("SELECT SUM(amount) "
-				+ "FROM MemberMonthlyPayment " 
-				+ "WHERE DATE(dateOfPayment) = ? " 
-				+ "AND paymentMode = ?");
+	private long sumPayment(LocalDate localDate, String paymentMode)
+			throws SQLException {
+		PreparedStatement prepareStatement = this.connection
+				.prepareStatement("SELECT SUM(amount) "
+						+ "FROM MemberMonthlyPayment "
+						+ "WHERE DATE(dateOfPayment) = ? "
+						+ "AND paymentMode = ?");
 		prepareStatement.setDate(1, Date.valueOf(localDate));
 		prepareStatement.setString(2, paymentMode);
 		ResultSet resultSet = prepareStatement.executeQuery();
@@ -83,5 +85,18 @@ public class MemberMonthlyPaymentDaoMYSQL {
 
 	public long sumPenaltyBasedOnDate(LocalDate localDate) throws SQLException {
 		return sumPayment(localDate, MemberMonthlyPayment.PENALTY);
+	}
+
+	public void deleteBasedOnMemberId(long memberId) throws SQLException {
+		PreparedStatement prepareStatement = this.connection
+				.prepareStatement("DELETE FROM MemberMonthlyPayment "
+						+ "WHERE memberId = ? ");
+		prepareStatement.setLong(1, memberId);
+		prepareStatement.execute();
+	}
+
+	public void deleteAll() throws SQLException {
+		this.connection.createStatement().execute(
+				"DELETE FROM MemberMonthlyPayment");
 	}
 }

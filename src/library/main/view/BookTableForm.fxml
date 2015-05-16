@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
@@ -26,9 +28,13 @@
 							<contextMenu>
 								<ContextMenu>
 									<items>
-										<MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#handleDeleteIndividualBookMenuItem" text="hapus" />
 										<MenuItem fx:id="seeDetailsMenuItem" mnemonicParsing="false" onAction="#handleSeeBookDetailMenuItem" text="lihat detail" />
-                              <MenuItem mnemonicParsing="false" onAction="#handleDeleteAllBooks" text="drop semua buku..." />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+										<MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#handleDeleteIndividualBookMenuItem" text="hapus" />
+                              <MenuItem fx:id="deleteAllBooksMenuItem" disable="true" mnemonicParsing="false" onAction="#handleDeleteAllBooks" text="drop semua buku...">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator></MenuItem>
 									</items>
 								</ContextMenu>
 							</contextMenu>

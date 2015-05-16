@@ -160,6 +160,7 @@ public class MemberTableFormController implements Initializable {
 			this.memberTableView.getItems().clear();
 			this.incomingMemberLineChartUtil.reloadData();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			new ErrorMessageWindowLoader(e.getMessage());
 		}
 	}

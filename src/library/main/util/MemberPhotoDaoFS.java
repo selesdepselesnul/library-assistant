@@ -13,7 +13,7 @@ import library.main.model.Member;
 public class MemberPhotoDaoFS {
 	public static final String NO_PHOTO = "library/main/resources/images/no_photo.png";
 	public static final Path MEMBER_PHOTO_PATH = Paths
-			.get("library/member_photo");
+			.get("resources/images");
 	public static final Image DEFAULT_IMAGE = new Image(
 			ClassLoader
 					.getSystemResourceAsStream("library/main/resources/images/your_face_here.png"));

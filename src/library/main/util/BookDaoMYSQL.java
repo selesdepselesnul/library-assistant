@@ -134,7 +134,9 @@ public class BookDaoMYSQL {
 	}
 
 	public String delete(String isbn) throws SQLException {
-		new IndividualBookDaoMYSQL(this.connection).deleteBasedOnIsbn(isbn);
+		IndividualBookDaoMYSQL individualBookDaoMYSQL = new IndividualBookDaoMYSQL(
+				this.connection);
+		individualBookDaoMYSQL.deleteBasedOnIsbn(isbn);
 
 		PreparedStatement prep = this.connection
 				.prepareStatement("DELETE FROM Book WHERE isbn = ?");
@@ -153,7 +155,11 @@ public class BookDaoMYSQL {
 	}
 
 	public void deleteAll() throws SQLException {
-		this.connection.createStatement().execute("DELETE FROM IndividualBook");
+		IndividualBookDaoMYSQL individualBookDaoMYSQL = new IndividualBookDaoMYSQL(
+				this.connection);
+		individualBookDaoMYSQL.deleteAll();
+
+		this.connection.createStatement().execute("DELETE FROM Book");
 	}
 
 }

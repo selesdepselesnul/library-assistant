@@ -59,6 +59,9 @@ public class BookTableFormController implements Initializable {
 
 	@FXML
 	private MenuItem seeDetailsMenuItem;
+	
+	@FXML
+	private MenuItem deleteAllBooksMenuItem;
 
 	private BookPieChartUtil bookPieChartUtil;
 
@@ -184,8 +187,7 @@ public class BookTableFormController implements Initializable {
 			this.individualBookDaoMYSQL.add(new IndividualBook(
 					this.isbnTextField.getText()), Integer
 					.parseInt(this.amountTextField.getText()));
-			// this.bookDaoMYSQL.writeIndividualBook(this.isbnTextField.getText(),
-			// Integer.parseInt(this.amountTextField.getText()));
+			
 			this.individualBookTableView.getItems().setAll(
 					this.individualBookDaoMYSQL.readAll());
 			this.isbnTextField.clear();
@@ -274,7 +276,6 @@ public class BookTableFormController implements Initializable {
 	@FXML
 	public void handleDeleteAllBooks() {
 		try {
-			this.individualBookDaoMYSQL.deleteAll();
 			this.bookDaoMYSQL.deleteAll();
 			this.bookPieChartUtil.reloadData();
 			this.individualBookTableView.getItems().clear();
@@ -286,6 +287,7 @@ public class BookTableFormController implements Initializable {
 	private void setContextMenuItem(boolean isDisable) {
 		this.deleteMenuItem.setDisable(isDisable);
 		this.seeDetailsMenuItem.setDisable(isDisable);
+		this.deleteAllBooksMenuItem.setDisable(isDisable);
 	}
 
 }

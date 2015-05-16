@@ -32,7 +32,7 @@ public class Main extends Application {
 
 							Properties sqlProperties = new Properties();
 							sqlProperties.load(Files.newInputStream(Paths
-									.get(".sql.properties")));
+									.get("resources/properties/sql.properties")));
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
 
@@ -70,7 +70,15 @@ public class Main extends Application {
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
-							new ErrorMessageWindowLoader(e.getMessage()).show();
+							new ErrorMessageWindowLoader(
+									"File sql.properties didalam folder resources/properties "
+											+ "tidak ditemukan, "
+											+ "harap buat terlebih dahulu, "
+											+ "dengan format sebagai berikut :\n\n"
+											+ "username=username mysql\n"
+											+ "password=password myql\n"
+											+ "port=port untuk mengakses mysql\n"
+											+ "hostname=nama hostname\n").show();
 							System.exit(1);
 						}
 					}).show(WindowLoader.SHOW_ONLY);

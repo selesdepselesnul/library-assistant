@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
@@ -57,9 +58,12 @@
 								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
 									<items>
 										<MenuItem mnemonicParsing="false" onAction="#handleUpdateMenuItem" text="perbaharui" />
-										<MenuItem mnemonicParsing="false" onAction="#handleDeleteMenuItem" text="hapus" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handlePaymentMenuItem" text="iuran" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleSeeBorrowingBookByMember" text="lihat peminjaman" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+										<MenuItem mnemonicParsing="false" onAction="#handleDeleteMenuItem" text="hapus" />
 									</items>
 								</SplitMenuButton>
 								<TextField fx:id="memberIdTextField" prefHeight="25.0" prefWidth="68.0" promptText="nomor id" GridPane.columnIndex="1" />
@@ -105,8 +109,10 @@
 								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
 									<items>
 										<MenuItem mnemonicParsing="false" onAction="#handleBookUpdatingMenuItem" text="perbaharui" />
-										<MenuItem mnemonicParsing="false" onAction="#handleDeleteBookMenuItem" text="hapus" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleSeeDetailOfBookMenuItem" text="lihat detail" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+										<MenuItem mnemonicParsing="false" onAction="#handleDeleteBookMenuItem" text="hapus" />
 									</items>
 								</SplitMenuButton>
 								<TextField fx:id="bookIsbnTextField" prefHeight="25.0" prefWidth="68.0" promptText="nomor isbn" GridPane.columnIndex="1" />
@@ -187,7 +193,11 @@
 			<contextMenu>
 				<ContextMenu>
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#handleSeeStatisticMenuItem" text="lihat detail rangkuman" />
+						<MenuItem mnemonicParsing="false" onAction="#handleSeeStatisticMenuItem" text="lihat detail rangkuman">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
 					</items>
 				</ContextMenu>
 			</contextMenu>
@@ -198,12 +208,30 @@
 					<items>
 						<Menu mnemonicParsing="false" text="buat laporan">
 							<items>
-								<MenuItem mnemonicParsing="false" onAction="#handleReportAvailableBookMenuItem" text="buku" />
-								<MenuItem mnemonicParsing="false" onAction="#handlePaymentReportMenuItem" text="pembayaran" />
+								<MenuItem mnemonicParsing="false" onAction="#handleReportAvailableBookMenuItem" text="buku">
+									<accelerator>
+										<KeyCodeCombination alt="DOWN" code="B" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<SeparatorMenuItem mnemonicParsing="false" />
+								<MenuItem mnemonicParsing="false" onAction="#handlePaymentReportMenuItem" text="pembayaran">
+									<accelerator>
+										<KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
 							</items>
 						</Menu>
-						<MenuItem mnemonicParsing="false" onAction="#handleConfigurationMenuItem" text="konfigurasi" />
-						<MenuItem mnemonicParsing="false" onAction="#handleCloseMenuItem" text="Close" />
+						<MenuItem mnemonicParsing="false" onAction="#handleConfigurationMenuItem" text="konfigurasi">
+							<accelerator>
+								<KeyCodeCombination alt="DOWN" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" onAction="#handleCloseMenuItem" text="Close">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
