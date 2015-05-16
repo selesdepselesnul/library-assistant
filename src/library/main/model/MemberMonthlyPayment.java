@@ -1,6 +1,6 @@
 package library.main.model;
 
-import library.main.util.configuration.Calculation;
+import library.main.util.Calculation;
 
 public class MemberMonthlyPayment {
 

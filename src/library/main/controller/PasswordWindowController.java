@@ -1,6 +1,7 @@
 package library.main.controller;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -10,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import library.main.util.configuration.Admin;
+import library.main.util.AdminDaoMYSQL;
 
 public class PasswordWindowController implements Initializable {
 
@@ -25,6 +26,8 @@ public class PasswordWindowController implements Initializable {
 
 	private Stage stage;
 
+	private AdminDaoMYSQL adminDaoMYSQL;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.unlockImageView
@@ -35,12 +38,16 @@ public class PasswordWindowController implements Initializable {
 
 	@FXML
 	public void handleSubmitButton() {
-		String password = passwordField.getText();
-		if (Admin.isValid(Admin.getUsername(), password)) {
-			this.passwordNotMatchedText.setVisible(false);
-			System.exit(0);
-		} else {
-			this.passwordNotMatchedText.setVisible(true);
+		try {
+			String password = passwordField.getText();
+			if (this.adminDaoMYSQL.read().getPassword().equals(password)) {
+				this.passwordNotMatchedText.setVisible(false);
+				System.exit(0);
+			} else {
+				this.passwordNotMatchedText.setVisible(true);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -51,6 +58,10 @@ public class PasswordWindowController implements Initializable {
 
 	public void setStage(Stage stage) {
 		this.stage = stage;
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 
 }

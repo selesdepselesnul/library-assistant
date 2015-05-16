@@ -2,6 +2,7 @@ package library.main.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -16,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import library.main.model.Admin;
+import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
@@ -24,7 +27,6 @@ import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.WindowLoader;
-import library.main.util.configuration.Admin;
 
 public class LoginPanelController implements Initializable {
 
@@ -57,6 +59,8 @@ public class LoginPanelController implements Initializable {
 
 	private BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL;
 
+	private AdminDaoMYSQL adminDaoMYSQL;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.loginImageView
@@ -81,53 +85,56 @@ public class LoginPanelController implements Initializable {
 
 	@FXML
 	public void handleOkButton() {
-		// prop.load(ClassLoader
-		// .getSystemResourceAsStream("library/main/resources/admin.properties"));
-		// LibraryUtil libraryUtil = new LibraryUtil(prop);
-		String username = this.usernameTextField.getText();
-		String password = this.passwordField.getText();
 
-		if (Admin.isValid(username, password)) {
-			try {
-				new WindowLoader(
-						"library/main/view/MainWindow.fxml",
-						"Library Assistant -BETA-",
-						(fxmlLoader, stage) -> {
-							try {
-								this.accountErrorLabel.setVisible(false);
+		try {
+			Admin admin = new Admin(this.usernameTextField.getText(),
+					this.passwordField.getText());
+			if (this.adminDaoMYSQL.read().equals(admin)) {
+				try {
+					new WindowLoader(
+							"library/main/view/MainWindow.fxml",
+							"Library Assistant -BETA-",
+							(fxmlLoader, stage) -> {
+								try {
+									this.accountErrorLabel.setVisible(false);
 
-								MainWindowController mainWindowController = (MainWindowController) fxmlLoader
-										.getController();
-								mainWindowController
-										.setMemberDaoMYSQL(this.memberDaoMYSQL);
-								mainWindowController
-										.setBookDaoMYSQL(this.bookDaoMYSQL);
-								mainWindowController
-										.setIndividualBookDaoMYSQL(this.individualBookDaoMYSQL);
-								mainWindowController
-										.setBorrowingDaoMYSQL(this.borrowingDaoMYSQL);
-								mainWindowController
-										.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
-								mainWindowController
-										.setBookPenaltyPaymentDaoMYSQL(this.bookPenaltyDaoMYSQL);
-								mainWindowController.init();
+									MainWindowController mainWindowController = (MainWindowController) fxmlLoader
+											.getController();
+									mainWindowController
+											.setAdminDaoMYSQL(this.adminDaoMYSQL);
+									mainWindowController
+											.setMemberDaoMYSQL(this.memberDaoMYSQL);
+									mainWindowController
+											.setBookDaoMYSQL(this.bookDaoMYSQL);
+									mainWindowController
+											.setIndividualBookDaoMYSQL(this.individualBookDaoMYSQL);
+									mainWindowController
+											.setBorrowingDaoMYSQL(this.borrowingDaoMYSQL);
+									mainWindowController
+											.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+									mainWindowController
+											.setBookPenaltyPaymentDaoMYSQL(this.bookPenaltyDaoMYSQL);
+									mainWindowController.init();
 
-								this.loginPanelStage.close();
+									this.loginPanelStage.close();
 
-								stage.initStyle(StageStyle.UNDECORATED);
-								stage.setMaximized(true);
-								stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-								stage.setFullScreen(true);
-							} catch (Exception e) {
-								new ErrorMessageWindowLoader(e.getMessage());
-							}
+									stage.initStyle(StageStyle.UNDECORATED);
+									stage.setMaximized(true);
+									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+									stage.setFullScreen(true);
+								} catch (Exception e) {
+									new ErrorMessageWindowLoader(e.getMessage());
+								}
 
-						}).show(WindowLoader.SHOW_AND_WAITING);
-			} catch (IOException e) {
-				e.printStackTrace();
+							}).show(WindowLoader.SHOW_AND_WAITING);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				this.accountErrorLabel.setVisible(true);
 			}
-		} else {
-			this.accountErrorLabel.setVisible(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -161,6 +168,10 @@ public class LoginPanelController implements Initializable {
 	public void setBookPenaltyPaymentDaoMYSQL(
 			BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL) {
 		this.bookPenaltyDaoMYSQL = bookPenaltyDaoMYSQL;
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 
 }

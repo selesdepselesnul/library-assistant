@@ -5,11 +5,8 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
 import library.main.model.Member;
-import library.main.util.configuration.Calculation;
 
 public class PaymentCalculator {
-//	public static final long AMOUNT_OF_PINALTY = 5000;
-//	public static final long AMOUNT_OF_MONTHLY_PAYMENT = 10000;
 	private long totalPenaltyPayment;
 	private long totalMonthlypayment;
 	private long totalPayment;

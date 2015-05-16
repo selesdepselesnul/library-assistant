@@ -1,28 +1,28 @@
 package library.main.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.sql.SQLException;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import library.main.util.configuration.Admin;
+import library.main.model.Admin;
+import library.main.util.AdminDaoMYSQL;
+import library.main.util.Calculation;
 
-public class LibraryConfigurationWindowController implements Initializable {
+public class LibraryConfigurationWindowController {
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
+	private static final String DIGIT = "^\\d+$";
 
 	@FXML
 	private TextField usernameTextField;
 
 	@FXML
 	private PasswordField passwordField;
+
+	@FXML
+	private TextField emailTextField;
 
 	@FXML
 	private Button submitForAdminAccountButton;
@@ -32,6 +32,29 @@ public class LibraryConfigurationWindowController implements Initializable {
 
 	@FXML
 	private Text weakAccountText;
+
+	@FXML
+	private TextField memberMonthlyPaymentTextField;
+
+	@FXML
+	private TextField memberPenaltyPaymentTextField;
+
+	@FXML
+	private TextField bookPenaltyPaymentTextField;
+
+	@FXML
+	private TextField bookMaxDaysOfBorrowingTextField;
+
+	@FXML
+	private Button submitForCalculationButton;
+
+	@FXML
+	private Button editForCalculationButton;
+
+	@FXML
+	private Text errorForCalculationText;
+
+	private AdminDaoMYSQL adminDaoMYSQL;
 
 	@FXML
 	public void handleEditForAdminAccount() {
@@ -44,12 +67,12 @@ public class LibraryConfigurationWindowController implements Initializable {
 	@FXML
 	public void handleSubmitForAdminAccount() {
 		try {
-			String username = this.usernameTextField.getText();
-			String password = this.passwordField.getText();
-			boolean notEmpty = !(username.isEmpty()) && !(password.isEmpty());
-			if (notEmpty && password.matches(".{8,}")) {
-				Admin.setUsername(username);
-				Admin.setPassword(password);
+			Admin admin = new Admin(this.usernameTextField.getText(),
+					this.passwordField.getText());
+			boolean notEmpty = !(admin.getUsername().isEmpty())
+					&& !(admin.getPassword().isEmpty());
+			if (notEmpty && admin.getPassword().matches(".{8,}")) {
+				this.adminDaoMYSQL.update(admin);
 				this.usernameTextField.setDisable(true);
 				this.passwordField.setDisable(true);
 				this.submitForAdminAccountButton.setDisable(false);
@@ -60,9 +83,86 @@ public class LibraryConfigurationWindowController implements Initializable {
 
 			}
 
-		} catch (IOException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	public void handleEditForCalculationButton() {
+		this.memberMonthlyPaymentTextField.setDisable(false);
+		this.memberPenaltyPaymentTextField.setDisable(false);
+		this.bookPenaltyPaymentTextField.setDisable(false);
+		this.bookMaxDaysOfBorrowingTextField.setDisable(false);
+
+		this.editForCalculationButton.setDisable(true);
+		this.submitForCalculationButton.setDisable(false);
+	}
+
+	@FXML
+	public void handleSubmitForCalculation() {
+		try {
+			String memberMonthlyPaymentString = this.memberMonthlyPaymentTextField
+					.getText();
+			String memberPenaltyPaymentString = this.memberPenaltyPaymentTextField
+					.getText();
+			String bookPenaltyPaymentString = this.bookPenaltyPaymentTextField
+					.getText();
+			String bookMaxDaysOfBorrowingString = this.bookMaxDaysOfBorrowingTextField
+					.getText();
+
+			if (memberMonthlyPaymentString.matches(DIGIT)
+					&& memberPenaltyPaymentString.matches(DIGIT)
+					&& bookPenaltyPaymentString.matches(DIGIT)
+					&& bookMaxDaysOfBorrowingString.matches(DIGIT)) {
+				Calculation.setMemberMonthlyPayment(Long
+						.parseLong(memberMonthlyPaymentString));
+				Calculation.setMemberPenaltyPayment(Long
+						.parseLong(memberPenaltyPaymentString));
+				Calculation.setBookPenaltyPayment(Long
+						.parseLong(bookPenaltyPaymentString));
+				Calculation.setBookMaxDaysOfBorrowing(Long
+						.parseLong(bookMaxDaysOfBorrowingString));
+				this.submitForCalculationButton.setDisable(true);
+				this.editForCalculationButton.setDisable(false);
+				this.memberMonthlyPaymentTextField.setDisable(true);
+				this.memberPenaltyPaymentTextField.setDisable(true);
+				this.bookPenaltyPaymentTextField.setDisable(true);
+				this.bookMaxDaysOfBorrowingTextField.setDisable(true);
+			} else {
+				this.errorForCalculationText.setVisible(true);
+			}
+		} catch (NumberFormatException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
+		try {
+			writeAdmin();
+			writeCalculation();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void writeCalculation() {
+		this.memberMonthlyPaymentTextField.setText(Calculation
+				.getMemberMonthlyPayment() + "");
+		this.memberPenaltyPaymentTextField.setText(Calculation
+				.getMemberPenaltyPayment() + "");
+		this.bookPenaltyPaymentTextField.setText(Calculation
+				.getBookPenaltyPayment() + "");
+		this.bookMaxDaysOfBorrowingTextField.setText(Calculation
+				.getBookMaxDaysOfBorrowing() + "");
+	}
+
+	private void writeAdmin() throws SQLException {
+		Admin admin = this.adminDaoMYSQL.read();
+		this.usernameTextField.setText(admin.getUsername());
+		this.passwordField.setText(admin.getPassword());
+		this.emailTextField.setText(admin.getEmail());
 	}
 
 }

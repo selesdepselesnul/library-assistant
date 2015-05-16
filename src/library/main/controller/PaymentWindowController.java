@@ -14,11 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
 import library.main.model.MemberMonthlyPayment;
+import library.main.util.Calculation;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberMonthlyPaymentDaoMYSQL;
 import library.main.util.PaymentCalculator;
-import library.main.util.configuration.Calculation;
 
 public class PaymentWindowController implements Initializable {
 

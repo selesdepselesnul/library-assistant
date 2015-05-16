@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import library.main.model.Borrowing;
 import library.main.model.BorrowingHistory;
 import library.main.model.PaymentReportSummary;
+import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BookPieChartUtil;
@@ -69,6 +70,8 @@ public class MainWindowController implements Initializable {
 	private MemberMonthlyPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
+
+	private AdminDaoMYSQL adminDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -238,6 +241,8 @@ public class MainWindowController implements Initializable {
 					(fxmlLoader, stage) -> {
 						PasswordWindowController passwordWindowController = (PasswordWindowController) fxmlLoader
 								.getController();
+						passwordWindowController
+								.setAdminDaoMYSQL(this.adminDaoMYSQL);
 						passwordWindowController.setStage(stage);
 					}).show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
@@ -643,8 +648,14 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleConfigurationMenuItem() {
 		try {
-			new WindowLoader("library/main/view/LibraryConfigurationWindow.fxml",
-					"Konfigurasi", (fxmlLoader, stage) -> {
+			new WindowLoader(
+					"library/main/view/LibraryConfigurationWindow.fxml",
+					"Konfigurasi",
+					(fxmlLoader, stage) -> {
+						LibraryConfigurationWindowController libraryConfigurationWindowController = (LibraryConfigurationWindowController) fxmlLoader
+								.getController();
+						libraryConfigurationWindowController
+								.setAdminDaoMYSQL(adminDaoMYSQL);
 					}).show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -676,5 +687,9 @@ public class MainWindowController implements Initializable {
 	public void setBookPenaltyPaymentDaoMYSQL(
 			BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL) {
 		this.bookPenaltyPaymentDaoMYSQL = bookPenaltyDaoMYSQL;
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 }

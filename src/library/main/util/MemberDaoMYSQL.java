@@ -16,21 +16,19 @@ public class MemberDaoMYSQL {
 	private PreparedStatement preparedStat;
 
 	public MemberDaoMYSQL(Connection conn) throws SQLException {
-		boolean isDatabaseExist = false;
+		boolean isTableExist = false;
 		this.connection = conn;
 		Statement stat = this.connection.createStatement();
-		ResultSet resultSet = stat.executeQuery("SHOW DATABASES");
+		ResultSet resultSet = stat.executeQuery("SHOW TABLES");
 
 		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("library")) {
-				isDatabaseExist = true;
+			if (resultSet.getString(1).equalsIgnoreCase("Member")) {
+				isTableExist = true;
 			}
 		}
 
-		if (!isDatabaseExist) {
-			stat.execute("CREATE DATABASE library");
-			stat.execute("USE library");
-			final String CREATED_MEMBER_DBASE = "CREATE TABLE `Member` ("
+		if (!isTableExist) {
+			stat.execute("CREATE TABLE `Member` ("
 					+ "`id` bigint(20) NOT NULL AUTO_INCREMENT,"
 					+ "`name` varchar(50) NOT NULL,"
 					+ "`gender` char(1) NOT NULL,"
@@ -42,11 +40,10 @@ public class MemberDaoMYSQL {
 					+ "`photo` TEXT,"
 					+ "`timeOfRegistering` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
 					+ "`timeOflastPayment` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
-					+ "PRIMARY KEY (`id`))";
-			stat.execute(CREATED_MEMBER_DBASE);
-		} else {
-			stat.execute("USE library");
-		}
+					+ "PRIMARY KEY (`id`) )");
+
+		} 
+		
 	}
 
 	public long write(Member member) throws SQLException {

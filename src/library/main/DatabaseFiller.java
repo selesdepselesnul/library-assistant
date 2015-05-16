@@ -23,6 +23,7 @@ import java.util.Scanner;
 import library.main.model.Book;
 import library.main.model.Borrowing;
 import library.main.model.IndividualBook;
+import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
 import library.main.util.IndividualBookDaoMYSQL;
@@ -30,14 +31,13 @@ import library.main.util.MYSQLConnector;
 import library.main.util.MemberDaoMYSQL;
 
 public class DatabaseFiller {
+	private static final String SQL_PROPERTIES = ".sql.properties";
 	private static List<LocalDate> timeOfLastPaymentList;
 
 	public static void main(String[] args) throws SQLException, IOException,
 			InterruptedException {
 		Properties properties = new Properties();
-		properties
-				.load(ClassLoader
-						.getSystemResourceAsStream("library/main/resources/sql.properties"));
+		properties.load(Files.newInputStream(Paths.get(SQL_PROPERTIES)));
 		System.out.println("isi atau bersihkan ?(0/1) ");
 		Scanner scanner = new Scanner(System.in);
 		int choosenOption = scanner.nextInt();
@@ -53,15 +53,14 @@ public class DatabaseFiller {
 			String birthPlaceTemplate = "tempat ke - ";
 			String addressTemplate = "jalan ke - ";
 			String isbnLowerTemplate = "139783161";
-			properties
-					.load(ClassLoader
-							.getSystemResourceAsStream("library/main/resources/sql.properties"));
 			Connection connectionWithoutDatabase = DriverManager.getConnection(
 					"jdbc:mysql://" + properties.getProperty("hostname") + ":"
 							+ properties.getProperty("port"),
 					properties.getProperty("username"),
 					properties.getProperty("password"));
-			new MemberDaoMYSQL(connectionWithoutDatabase);
+			new AdminDaoMYSQL(connectionWithoutDatabase);
+			new MemberDaoMYSQL(
+					new MYSQLConnector(properties, "library").getConnection());
 
 			System.out.print("Berapa data bodong yang ingin dimasukan ? ");
 			int count = scanner.nextInt();
@@ -179,7 +178,6 @@ public class DatabaseFiller {
 					preparedStatement.setBoolean(1, false);
 					preparedStatement.setLong(2, bookId);
 					preparedStatement.execute();
-
 
 					System.out
 							.println("              Data Peminjaman            ");

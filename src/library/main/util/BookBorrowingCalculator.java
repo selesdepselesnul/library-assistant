@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import library.main.util.configuration.Calculation;
-
 public class BookBorrowingCalculator {
 
 	public static long calculatePinaltyPayment(
