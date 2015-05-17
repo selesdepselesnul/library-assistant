@@ -1,5 +1,5 @@
     Library assistant is program that is used to make librariant's life easier
-    Copyright (C) 2015 Moch Deden R S, Ricky Mustofa, Yoga
+    Copyright (C) 2015 Moch Deden R S, Ricky Mustofa, Yoga Eldi
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
