@@ -22,6 +22,8 @@ public class NewBorrowingBookController {
 
 	private BorrowingDaoMYSQL borrowingDaoMYSQL;
 
+	private Runnable runnable;
+
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
@@ -35,6 +37,9 @@ public class NewBorrowingBookController {
 			this.borrowingDaoMYSQL.write(borrowing);
 			this.bookIdTextField.clear();
 			this.memberIdTextField.clear();
+			if(this.runnable != null) {
+				this.runnable.run();
+			}
 			this.stage.close();
 		} catch (SQLException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
@@ -48,6 +53,10 @@ public class NewBorrowingBookController {
 
 	public void setBorrowingDaoMYSQL(BorrowingDaoMYSQL borrowingDaoMYSQL) {
 		this.borrowingDaoMYSQL = borrowingDaoMYSQL;
+	}
+
+	public void doActionBeforeExit(Runnable runnable) {
+		this.runnable = runnable;
 	}
 
 }

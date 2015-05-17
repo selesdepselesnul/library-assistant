@@ -35,7 +35,7 @@ public class Main extends Application {
 									.get("resources/properties/sql.properties")));
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
-
+							
 							// and the life is begun :v
 							loginPanelController
 									.setAdminDaoMYSQL(new AdminDaoMYSQL(

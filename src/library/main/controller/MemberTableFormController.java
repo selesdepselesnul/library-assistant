@@ -22,11 +22,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
+import library.main.util.AdminDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.MemberPhotoDaoFS;
+import library.main.util.PasswordAskerWindow;
 import library.main.util.PaymentCalculator;
 import library.main.util.WindowLoader;
 
@@ -97,6 +99,8 @@ public class MemberTableFormController implements Initializable {
 
 	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
+	private AdminDaoMYSQL adminDaoMYSQL;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.idMemberTableColumn
@@ -156,26 +160,38 @@ public class MemberTableFormController implements Initializable {
 	@FXML
 	public void handleDeleteAllMenuItem() {
 		try {
-			this.memberDaoMYSQL.deleteAll();
-			this.memberTableView.getItems().clear();
-			this.incomingMemberLineChartUtil.reloadData();
-		} catch (SQLException e) {
+			new PasswordAskerWindow(false, () -> {
+				try {
+					this.memberDaoMYSQL.deleteAll();
+					this.memberTableView.getItems().clear();
+					this.incomingMemberLineChartUtil.reloadData();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}, this.adminDaoMYSQL).showAndWait();
+		} catch (IOException e) {
 			e.printStackTrace();
-			new ErrorMessageWindowLoader(e.getMessage());
 		}
 	}
 
 	@FXML
 	public void handleDeleteMenuItem() {
 
+		Member selectedMember = this.memberTableView.getSelectionModel()
+				.getSelectedItem();
 		try {
-			Member selectedMember = this.memberTableView.getSelectionModel()
-					.getSelectedItem();
-			this.memberDaoMYSQL.delete(selectedMember.getId());
-			this.memberTableView.getItems().remove(selectedMember);
-			this.incomingMemberLineChartUtil.reloadData();
-		} catch (SQLException e) {
-			new ErrorMessageWindowLoader(e.getMessage()).show();
+			new PasswordAskerWindow(false, () -> {
+				try {
+					this.memberDaoMYSQL.delete(selectedMember.getId());
+					this.memberTableView.getItems().remove(selectedMember);
+					this.incomingMemberLineChartUtil.reloadData();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}, this.adminDaoMYSQL).showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -183,29 +199,44 @@ public class MemberTableFormController implements Initializable {
 	@FXML
 	public void handleUpdateMenuItem() {
 		try {
-			new WindowLoader(
-					"library/main/view/NewMemberForm.fxml",
-					"Perbarui Anggota",
-					(fxmlLoader, stage) -> {
+			new PasswordAskerWindow(
+					false,
+					() -> {
 						try {
-							TableViewSelectionModel<Member> selectionModel = this.memberTableView
-									.getSelectionModel();
-							long id = selectionModel.getSelectedItem().getId();
-							NewMemberFormController newMemberFormController = (NewMemberFormController) fxmlLoader
-									.getController();
-							newMemberFormController.setMemberTable(
-									this.memberTableView,
-									selectionModel.getSelectedIndex());
-							newMemberFormController.setStage(stage);
-							newMemberFormController.setMemberId(id);
-							newMemberFormController
-									.setMemberDaoMYSQL(this.memberDaoMYSQL);
-							newMemberFormController.writeToForm(selectionModel
-									.getSelectedItem());
+							new WindowLoader(
+									"library/main/view/NewMemberForm.fxml",
+									"Perbarui Anggota",
+									(fxmlLoader, stage) -> {
+										try {
+											TableViewSelectionModel<Member> selectionModel = this.memberTableView
+													.getSelectionModel();
+											long id = selectionModel
+													.getSelectedItem().getId();
+											NewMemberFormController newMemberFormController = (NewMemberFormController) fxmlLoader
+													.getController();
+											newMemberFormController
+													.setMemberTable(
+															this.memberTableView,
+															selectionModel
+																	.getSelectedIndex());
+											newMemberFormController
+													.setStage(stage);
+											newMemberFormController
+													.setMemberId(id);
+											newMemberFormController
+													.setMemberDaoMYSQL(this.memberDaoMYSQL);
+											newMemberFormController
+													.writeToForm(selectionModel
+															.getSelectedItem());
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					}).show(WindowLoader.SHOW_AND_WAITING);
+
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
@@ -294,28 +325,35 @@ public class MemberTableFormController implements Initializable {
 	@FXML
 	public void handlePaymentMenuItem() {
 		try {
-			new WindowLoader(
-					"library/main/view/PaymentWindow.fxml",
-					"Iuran Anggota",
-					(fxmlLoader, stage) -> {
-						try {
-							PaymentWindowController paymentWindowController = (PaymentWindowController) fxmlLoader
-									.getController();
-							paymentWindowController
+			new PasswordAskerWindow(false, () -> {
+				try {
+					new WindowLoader(
+							"library/main/view/PaymentWindow.fxml",
+							"Iuran Anggota",
+							(fxmlLoader, stage) -> {
+								try {
+									PaymentWindowController paymentWindowController = (PaymentWindowController) fxmlLoader
+											.getController();
+									paymentWindowController
 									.setMemberId(this.memberTableView
 											.getSelectionModel()
 											.getSelectedItem().getId());
-							paymentWindowController
+									paymentWindowController
 									.setMemberDaoMYSQL(memberDaoMYSQL);
-							paymentWindowController
+									paymentWindowController
 									.setMemberTableView(this.memberTableView);
-							paymentWindowController
+									paymentWindowController
 									.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
-						} catch (Exception e) {
-							new ErrorMessageWindowLoader(e.getMessage());
-						}
-
-					}).show(WindowLoader.SHOW_AND_WAITING);
+								} catch (Exception e) {
+									new ErrorMessageWindowLoader(e.getMessage());
+								}
+								
+							}).show(WindowLoader.SHOW_AND_WAITING);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}, this.adminDaoMYSQL).showAndWait();
 		} catch (Exception e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
@@ -355,6 +393,10 @@ public class MemberTableFormController implements Initializable {
 	public void setMemberMonthlyPaymentDaoMYSQL(
 			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 
 }

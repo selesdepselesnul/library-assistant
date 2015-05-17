@@ -19,11 +19,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import library.main.model.Book;
 import library.main.model.IndividualBook;
+import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookGrouper;
 import library.main.util.BookPieChartUtil;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
+import library.main.util.PasswordAskerWindow;
 import library.main.util.WindowLoader;
 
 public class BookTableFormController implements Initializable {
@@ -59,13 +61,15 @@ public class BookTableFormController implements Initializable {
 
 	@FXML
 	private MenuItem seeDetailsMenuItem;
-	
+
 	@FXML
 	private MenuItem deleteAllBooksMenuItem;
 
 	private BookPieChartUtil bookPieChartUtil;
 
 	private IndividualBookDaoMYSQL individualBookDaoMYSQL;
+
+	private AdminDaoMYSQL adminDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -108,14 +112,25 @@ public class BookTableFormController implements Initializable {
 	@FXML
 	public void handleDeleteIndividualBookMenuItem() {
 		try {
-			this.individualBookDaoMYSQL.delete(this.individualBookTableView
-					.getSelectionModel().getSelectedItem());
-			this.individualBookTableView.getItems().remove(
-					this.individualBookTableView.getSelectionModel()
-							.getSelectedItem());
-			this.bookPieChartUtil.reloadData();
-		} catch (SQLException e) {
-			new ErrorMessageWindowLoader(e.getMessage()).show();
+			new PasswordAskerWindow(false,
+					() -> {
+						try {
+							this.individualBookDaoMYSQL
+									.delete(this.individualBookTableView
+											.getSelectionModel()
+											.getSelectedItem());
+							this.individualBookTableView.getItems().remove(
+									this.individualBookTableView
+											.getSelectionModel()
+											.getSelectedItem());
+							this.bookPieChartUtil.reloadData();
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}, this.adminDaoMYSQL).showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -184,15 +199,21 @@ public class BookTableFormController implements Initializable {
 	@FXML
 	public void handleAddNewIndividualBookButton() throws IOException {
 		try {
-			this.individualBookDaoMYSQL.add(new IndividualBook(
-					this.isbnTextField.getText()), Integer
-					.parseInt(this.amountTextField.getText()));
-			
-			this.individualBookTableView.getItems().setAll(
-					this.individualBookDaoMYSQL.readAll());
-			this.isbnTextField.clear();
-			this.amountTextField.clear();
-		} catch (NumberFormatException | SQLException e) {
+			new PasswordAskerWindow(false, () -> {
+				try {
+					this.individualBookDaoMYSQL.add(new IndividualBook(
+							this.isbnTextField.getText()), Integer
+							.parseInt(this.amountTextField.getText()));
+					this.individualBookTableView.getItems().setAll(
+							this.individualBookDaoMYSQL.readAll());
+					this.isbnTextField.clear();
+					this.amountTextField.clear();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}, this.adminDaoMYSQL).showAndWait();
+		} catch (NumberFormatException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
@@ -272,14 +293,22 @@ public class BookTableFormController implements Initializable {
 			setContextMenuItem(true);
 		}
 	}
-	
+
 	@FXML
 	public void handleDeleteAllBooks() {
 		try {
-			this.bookDaoMYSQL.deleteAll();
-			this.bookPieChartUtil.reloadData();
-			this.individualBookTableView.getItems().clear();
-		} catch (SQLException e) {
+			new PasswordAskerWindow(false, () -> {
+
+				try {
+					this.bookDaoMYSQL.deleteAll();
+					this.bookPieChartUtil.reloadData();
+					this.individualBookTableView.getItems().clear();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}, this.adminDaoMYSQL).showAndWait();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -288,6 +317,10 @@ public class BookTableFormController implements Initializable {
 		this.deleteMenuItem.setDisable(isDisable);
 		this.seeDetailsMenuItem.setDisable(isDisable);
 		this.deleteAllBooksMenuItem.setDisable(isDisable);
+	}
+
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 
 }

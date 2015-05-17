@@ -75,6 +75,8 @@ public class NewMemberFormController implements Initializable {
 
 	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
+	private Runnable runnable;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
@@ -134,6 +136,9 @@ public class NewMemberFormController implements Initializable {
 				this.memberDaoMYSQL.update(member);
 			}
 			this.member = member;
+			if(this.runnable != null) {
+				this.runnable.run();
+			}
 			this.stage.close();
 		} catch (Exception e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
@@ -219,6 +224,10 @@ public class NewMemberFormController implements Initializable {
 	public void setMemberMonthlyPaymentDaoMYSQL(
 			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
+	}
+
+	public void doBeforeExit(Runnable runnable) {
+		this.runnable = runnable;
 	}
 
 }

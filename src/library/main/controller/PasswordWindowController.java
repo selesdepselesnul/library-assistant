@@ -28,12 +28,17 @@ public class PasswordWindowController implements Initializable {
 
 	private AdminDaoMYSQL adminDaoMYSQL;
 
+	private boolean isCloseSystem;
+
+	private Runnable runnable;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.unlockImageView
 				.setImage(new Image(
 						ClassLoader
 								.getSystemResourceAsStream("library/main/resources/images/unlock.png")));
+		this.isCloseSystem = false;
 	}
 
 	@FXML
@@ -42,7 +47,12 @@ public class PasswordWindowController implements Initializable {
 			String password = passwordField.getText();
 			if (this.adminDaoMYSQL.read().getPassword().equals(password)) {
 				this.passwordNotMatchedText.setVisible(false);
-				System.exit(0);
+				if (isCloseSystem) {
+					System.exit(0);
+				} else {
+					this.runnable.run();
+					stage.close();
+				}
 			} else {
 				this.passwordNotMatchedText.setVisible(true);
 			}
@@ -62,6 +72,14 @@ public class PasswordWindowController implements Initializable {
 
 	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
+	}
+
+	public void setCloseSystem(boolean isCloseSystem) {
+		this.isCloseSystem = isCloseSystem;
+	}
+
+	public void setRunnable(Runnable runnable) {
+		this.runnable = runnable;
 	}
 
 }

@@ -46,6 +46,8 @@ public class NewBookFormController implements Initializable {
 
 	private String bookIsbn;
 
+	private Runnable runnable;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.bookIsbn = null;
@@ -96,6 +98,9 @@ public class NewBookFormController implements Initializable {
 						this.categoryComboBox.getValue(), Integer
 								.parseInt(this.amountTextField.getText())));
 			}
+			if(this.runnable != null) {
+				this.runnable.run();
+			}
 			this.stage.close();
 		} catch (NumberFormatException | SQLException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
@@ -117,6 +122,10 @@ public class NewBookFormController implements Initializable {
 		this.publisherComboBox.setValue(book.getPublisher());
 		this.titleTextField.setText(book.getTitle());
 		this.authorTextField.setText(book.getAuthors());
+	}
+
+	public void doActionBeforeExit(Runnable runnable) {
+		this.runnable = runnable;
 	}
 
 }
