@@ -32,7 +32,7 @@ public class Main extends Application {
 
 							Properties sqlProperties = new Properties();
 							sqlProperties.load(Files.newInputStream(Paths
-									.get("resources/properties/sql.properties")));
+									.get("../resources/properties/sql.properties")));
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
 							
