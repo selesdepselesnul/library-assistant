@@ -250,7 +250,7 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<Text fontSmoothingType="LCD" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Assistant -BETA-" GridPane.columnIndex="1">
+				<Text fontSmoothingType="LCD" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Assistant 1.0.0" GridPane.columnIndex="1">
 					<font>
 						<Font name="System Bold" size="24.0" />
 					</font>

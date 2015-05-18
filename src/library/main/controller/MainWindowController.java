@@ -36,8 +36,8 @@ import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.LibraryReporter;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberPaymentDaoMYSQL;
+import library.main.util.PasswordAskerWindow;
 import library.main.util.WindowLoader;
-import library.main.controller.PasswordWindowController;
 
 public class MainWindowController implements Initializable {
 
@@ -105,15 +105,8 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	public void handleAddMemberButton() {
-		Runnable runnable = () -> {
-			try {
-				updateIncomingMemberLineChart();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		};
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -128,21 +121,32 @@ public class MainWindowController implements Initializable {
 											newMemberFormController
 													.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
 											newMemberFormController
-													.doBeforeExit(runnable);
+													.doBeforeExit(() -> {
+														try {
+															updateIncomingMemberLineChart();
+														} catch (Exception e) {
+															new ErrorMessageWindowLoader(
+																	e.getMessage())
+																	.show();
+														}
+
+													});
 											newMemberFormController
 													.setMemberDaoMYSQL(this.memberDaoMYSQL);
 											newMemberFormController
 													.setStage(stage);
 										} catch (Exception e) {
-											e.printStackTrace();
+											new ErrorMessageWindowLoader(e
+													.getMessage()).show();
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
-					});
+
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -152,8 +156,9 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	public void handleAddBookButton() {
+
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -184,12 +189,12 @@ public class MainWindowController implements Initializable {
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					});
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 
 	}
@@ -200,22 +205,19 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	public void handleDeleteMenuItem() {
-		String id = this.memberIdTextField.getText();
 		try {
-			askForPassword(false, () -> {
+			String id = this.memberIdTextField.getText();
+			new PasswordAskerWindow(false, () -> {
 				try {
 					this.memberDaoMYSQL.delete(Long.parseLong(id));
 					this.memberIdTextField.clear();
 					updateIncomingMemberLineChart();
 				} catch (Exception e) {
-					e.printStackTrace();
+					new ErrorMessageWindowLoader(e.getMessage()).show();
 				}
-
-			});
-		} catch (NumberFormatException e) {
-			showError(e);
-		} catch (IOException e) {
-			e.printStackTrace();
+			}, this.adminDaoMYSQL).showAndWait();
+		} catch (NumberFormatException | IOException e) {
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -223,7 +225,7 @@ public class MainWindowController implements Initializable {
 	public void handleUpdateMenuItem() {
 		try {
 			long memberId = Long.parseLong(this.memberIdTextField.getText());
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -249,13 +251,12 @@ public class MainWindowController implements Initializable {
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					});
-
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -292,33 +293,18 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleCloseMenuItem() {
 		try {
-			askForPassword(true, null);
+			new PasswordAskerWindow(true, null, this.adminDaoMYSQL)
+					.showAndWait();
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage());
 		}
-	}
-
-	private void askForPassword(boolean isCloseSystem, Runnable runnable)
-			throws IOException {
-		new WindowLoader(
-				"library/main/view/PasswordWindow.fxml",
-				"Masukan Password",
-				(fxmlLoader, stage) -> {
-					PasswordWindowController passwordWindowController = (PasswordWindowController) fxmlLoader
-							.getController();
-					passwordWindowController.setRunnable(runnable);
-					passwordWindowController.setCloseSystem(isCloseSystem);
-					passwordWindowController
-							.setAdminDaoMYSQL(this.adminDaoMYSQL);
-					passwordWindowController.setStage(stage);
-				}).show(WindowLoader.SHOW_AND_WAITING);
 	}
 
 	@FXML
 	public void handlePaymentMenuItem() {
 
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -339,12 +325,11 @@ public class MainWindowController implements Initializable {
 
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
-
-					});
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -409,25 +394,25 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleDeleteBookMenuItem() {
 		try {
-			askForPassword(false, () -> {
+			new PasswordAskerWindow(false, () -> {
 				try {
 					this.bookDaoMYSQL.delete(this.bookIsbnTextField.getText());
 					this.bookIsbnTextField.clear();
 					updateBookPieChart();
 				} catch (Exception e) {
-					e.printStackTrace();
+					new ErrorMessageWindowLoader(e.getMessage()).show();
 				}
 
-			});
+			}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
 	@FXML
 	public void handleBookUpdatingMenuItem() {
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -457,12 +442,12 @@ public class MainWindowController implements Initializable {
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					});
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 
 	}
@@ -470,7 +455,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleAddNewBorrowingBook() {
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -489,7 +474,9 @@ public class MainWindowController implements Initializable {
 														try {
 															updateBookPieChart();
 														} catch (Exception e) {
-															e.printStackTrace();
+															new ErrorMessageWindowLoader(
+																	e.getMessage())
+																	.show();
 														}
 
 													});
@@ -497,23 +484,24 @@ public class MainWindowController implements Initializable {
 													.setStage(stage);
 											updateBookPieChart();
 										} catch (Exception e) {
-											showError(e);
+											new ErrorMessageWindowLoader(e
+													.getMessage()).show();
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					});
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
 	@FXML
 	public void handleDeleteBorrowingBookMenuItem() {
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -547,18 +535,18 @@ public class MainWindowController implements Initializable {
 													.clear();
 											updateBookPieChart();
 										} catch (Exception e) {
-											e.printStackTrace();
-											showError(e);
+											new ErrorMessageWindowLoader(e
+													.getMessage()).show();
 										}
 
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					});
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -769,7 +757,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleConfigurationMenuItem() {
 		try {
-			askForPassword(
+			new PasswordAskerWindow(
 					false,
 					() -> {
 						try {
@@ -783,11 +771,12 @@ public class MainWindowController implements Initializable {
 												.setAdminDaoMYSQL(adminDaoMYSQL);
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
-					});
+
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 

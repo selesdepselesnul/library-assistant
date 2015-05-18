@@ -70,8 +70,7 @@ public class Main extends Application {
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
-//							new ErrorMessageWindowLoader(e.getMessage());
-							e.printStackTrace();
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 							System.exit(1);
 						}
 					}).show(WindowLoader.SHOW_ONLY);

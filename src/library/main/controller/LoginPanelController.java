@@ -123,18 +123,18 @@ public class LoginPanelController implements Initializable {
 									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 									stage.setFullScreen(true);
 								} catch (Exception e) {
-									new ErrorMessageWindowLoader(e.getMessage());
+									new ErrorMessageWindowLoader(e.getMessage()).show();
 								}
 
 							}).show(WindowLoader.SHOW_AND_WAITING);
 				} catch (IOException e) {
-					e.printStackTrace();
+					new ErrorMessageWindowLoader(e.getMessage()).show();
 				}
 			} else {
 				this.accountErrorLabel.setVisible(true);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 

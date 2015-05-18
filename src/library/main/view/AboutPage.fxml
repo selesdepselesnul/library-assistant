@@ -15,7 +15,7 @@
 				<Button layoutY="286.0" mnemonicParsing="false" onAction="#handleLicenseButton" text="License" />
 				<Button layoutX="442.0" layoutY="286.0" mnemonicParsing="false" onAction="#handleCreditsButton" text="Credits" />
 				<ImageView fx:id="aboutPageImageView" fitHeight="96.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-				<Text fontSmoothingType="LCD" layoutX="79.0" layoutY="54.435546875" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Assistant -BETA-" wrappingWidth="294.359375">
+				<Text fontSmoothingType="LCD" layoutX="79.0" layoutY="54.435546875" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Assistant 1.0.0" wrappingWidth="294.359375">
 					<font>
 						<Font name="System Bold" size="20.0" />
 					</font>
