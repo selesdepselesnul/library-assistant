@@ -3,6 +3,7 @@ package library.main.util;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import library.main.model.CalculationConfiguration;
 import library.main.model.Member;
 
 public class PaymentCalculator {
@@ -23,27 +24,25 @@ public class PaymentCalculator {
 		return totalPayment;
 	}
 
-	public PaymentCalculator(Member member) {
+	public PaymentCalculator(Member member, CalculationConfiguration calculationConfiguration) {
 		LocalDate lastPayment = member.getTimeOfLastPayment();
 		daysSinceLastPayment = ChronoUnit.DAYS.between(lastPayment,
 				LocalDate.now());
-		System.out.println(daysSinceLastPayment);
 
-		if (daysSinceLastPayment >= Calculation.getMemberMaxDaysOfPayment()) {
-			if (daysSinceLastPayment > Calculation.getMemberMaxDaysOfPayment()) {
-				this.totalPenaltyPayment = (daysSinceLastPayment - Calculation
+		System.out.println("calculation cofiguration = " + calculationConfiguration);
+		if (daysSinceLastPayment >= calculationConfiguration.getMemberMaxDaysOfPayment()) {
+			if (daysSinceLastPayment > calculationConfiguration.getMemberMaxDaysOfPayment()) {
+				this.totalPenaltyPayment = (daysSinceLastPayment - calculationConfiguration
 						.getMemberMaxDaysOfPayment())
-						* Calculation.getMemberPenaltyPayment();
+						* calculationConfiguration.getMemberPenaltyPayment();
 				System.out.println("total penalty payment = "
 						+ this.totalPenaltyPayment);
 			} else {
 				this.totalPenaltyPayment = 0L;
 			}
-			System.out.println(daysSinceLastPayment
-					/ Calculation.getMemberMaxDaysOfPayment());
-			this.routinePayment = (daysSinceLastPayment / Calculation
+			this.routinePayment = (daysSinceLastPayment / calculationConfiguration
 					.getMemberMaxDaysOfPayment())
-					* Calculation.getMemberMonthlyPayment();
+					* calculationConfiguration.getMemberRoutinePayment();
 			this.totalPayment = this.routinePayment + this.totalPenaltyPayment;
 		}
 

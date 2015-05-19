@@ -22,6 +22,7 @@ import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MemberDaoMYSQL;
@@ -60,6 +61,8 @@ public class LoginPanelController implements Initializable {
 	private BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL;
 
 	private AdminDaoMYSQL adminDaoMYSQL;
+
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -103,6 +106,8 @@ public class LoginPanelController implements Initializable {
 									mainWindowController
 											.setAdminDaoMYSQL(this.adminDaoMYSQL);
 									mainWindowController
+											.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+									mainWindowController
 											.setMemberDaoMYSQL(this.memberDaoMYSQL);
 									mainWindowController
 											.setBookDaoMYSQL(this.bookDaoMYSQL);
@@ -123,7 +128,8 @@ public class LoginPanelController implements Initializable {
 									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 									stage.setFullScreen(true);
 								} catch (Exception e) {
-									new ErrorMessageWindowLoader(e.getMessage()).show();
+									new ErrorMessageWindowLoader(e.getMessage())
+											.show();
 								}
 
 							}).show(WindowLoader.SHOW_AND_WAITING);
@@ -172,6 +178,11 @@ public class LoginPanelController implements Initializable {
 
 	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
+	}
+
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
 	}
 
 }

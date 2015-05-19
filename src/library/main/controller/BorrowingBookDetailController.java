@@ -12,6 +12,7 @@ import library.main.model.BookPenalty;
 import library.main.util.BookBorrowingCalculator;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 
 public class BorrowingBookDetailController implements Initializable {
 
@@ -25,6 +26,8 @@ public class BorrowingBookDetailController implements Initializable {
 	private Stage stage;
 
 	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
+
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -54,12 +57,17 @@ public class BorrowingBookDetailController implements Initializable {
 		this.bookPenaltyPaymentDaoMYSQL = bookPenaltyPaymentDaoMYSQL;
 		long bookPenaltyAmount = BookBorrowingCalculator
 				.calculatePinaltyPayment(this.borrowingDaoMYSQL,
-						this.borrowingId);
+						this.calculationConfigurationDaoMYSQL, this.borrowingId);
 		this.pinaltyText.setText(bookPenaltyAmount + "");
 		if (bookPenaltyAmount > 0) {
 			this.bookPenaltyPaymentDaoMYSQL.write(new BookPenalty(
 					this.borrowingId, bookPenaltyAmount));
 		}
+	}
+
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
 	}
 
 }

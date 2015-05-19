@@ -21,8 +21,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import library.main.model.CalculationConfiguration;
 import library.main.model.Member;
 import library.main.util.AdminDaoMYSQL;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.MemberDaoMYSQL;
@@ -100,6 +102,8 @@ public class MemberTableFormController implements Initializable {
 	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
 	private AdminDaoMYSQL adminDaoMYSQL;
+
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -325,35 +329,42 @@ public class MemberTableFormController implements Initializable {
 	@FXML
 	public void handlePaymentMenuItem() {
 		try {
-			new PasswordAskerWindow(false, () -> {
-				try {
-					new WindowLoader(
-							"library/main/view/PaymentWindow.fxml",
-							"Iuran Anggota",
-							(fxmlLoader, stage) -> {
-								try {
-									PaymentWindowController paymentWindowController = (PaymentWindowController) fxmlLoader
-											.getController();
-									paymentWindowController
-									.setMemberId(this.memberTableView
-											.getSelectionModel()
-											.getSelectedItem().getId());
-									paymentWindowController
-									.setMemberDaoMYSQL(memberDaoMYSQL);
-									paymentWindowController
-									.setMemberTableView(this.memberTableView);
-									paymentWindowController
-									.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
-								} catch (Exception e) {
-									new ErrorMessageWindowLoader(e.getMessage());
-								}
-								
-							}).show(WindowLoader.SHOW_AND_WAITING);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			}, this.adminDaoMYSQL).showAndWait();
+			new PasswordAskerWindow(
+					false,
+					() -> {
+						try {
+							new WindowLoader(
+									"library/main/view/PaymentWindow.fxml",
+									"Iuran Anggota",
+									(fxmlLoader, stage) -> {
+										try {
+											PaymentWindowController paymentWindowController = (PaymentWindowController) fxmlLoader
+													.getController();
+											paymentWindowController
+													.setMemberId(this.memberTableView
+															.getSelectionModel()
+															.getSelectedItem()
+															.getId());
+											paymentWindowController
+													.setMemberDaoMYSQL(memberDaoMYSQL);
+											paymentWindowController
+													.setMemberTableView(this.memberTableView);
+											paymentWindowController
+													.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+											paymentWindowController
+													.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+											paymentWindowController.writeToForm();
+										} catch (Exception e) {
+											new ErrorMessageWindowLoader(e
+													.getMessage());
+										}
+
+									}).show(WindowLoader.SHOW_AND_WAITING);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}, this.adminDaoMYSQL).showAndWait();
 		} catch (Exception e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
@@ -375,12 +386,15 @@ public class MemberTableFormController implements Initializable {
 
 	}
 
-	private Predicate<Member> decidePaymentStatusPredicate(String paymentStatus) {
-		Predicate<Member> predicate = member -> new PaymentCalculator(member)
-				.getDaysSinceLastPayment() > 0;
+	private Predicate<Member> decidePaymentStatusPredicate(String paymentStatus)
+			throws SQLException {
+		CalculationConfiguration lastCalculationConfiguration = this.calculationConfigurationDaoMYSQL
+				.readLastConfig();
+		Predicate<Member> predicate = member -> new PaymentCalculator(member,
+				lastCalculationConfiguration).getDaysSinceLastPayment() > 0;
 		if (paymentStatus.equalsIgnoreCase("sudah")) {
-			predicate = member -> new PaymentCalculator(member)
-					.getDaysSinceLastPayment() == 0;
+			predicate = member -> new PaymentCalculator(member,
+					lastCalculationConfiguration).getDaysSinceLastPayment() == 0;
 		}
 		return predicate;
 	}
@@ -397,6 +411,11 @@ public class MemberTableFormController implements Initializable {
 
 	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
+	}
+
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
 	}
 
 }

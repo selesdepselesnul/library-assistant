@@ -12,7 +12,7 @@ import library.main.util.AdminDaoMYSQL;
 import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BorrowingDaoMYSQL;
-import library.main.util.Calculation;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IndividualBookDaoMYSQL;
 import library.main.util.MYSQLConnector;
@@ -35,7 +35,7 @@ public class Main extends Application {
 									.get("../resources/properties/sql.properties")));
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
-							
+
 							// and the life is begun :v
 							loginPanelController
 									.setAdminDaoMYSQL(new AdminDaoMYSQL(
@@ -45,9 +45,9 @@ public class Main extends Application {
 							Connection connectionWithSelectedDBase = new MYSQLConnector(
 									sqlProperties, "library").getConnection();
 
-							Calculation
-									.initConnection(connectionWithSelectedDBase);
-
+							loginPanelController
+									.setCalculationConfigurationDaoMYSQL(new CalculationConfigurationDaoMYSQL(
+											connectionWithSelectedDBase));
 							loginPanelController
 									.setMemberDaoMYSQL(new MemberDaoMYSQL(
 											connectionWithSelectedDBase));

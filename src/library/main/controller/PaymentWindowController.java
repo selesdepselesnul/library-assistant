@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
 import library.main.model.MemberPayment;
-import library.main.util.Calculation;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberPaymentDaoMYSQL;
@@ -49,6 +49,7 @@ public class PaymentWindowController implements Initializable {
 	@FXML
 	private Button paymentButton;
 	private PaymentCalculator paymentCalculator;
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -58,7 +59,7 @@ public class PaymentWindowController implements Initializable {
 								.getSystemResourceAsStream("library/main/resources/images/card.png")));
 	}
 
-	private void writeToForm() {
+	public void writeToForm() {
 		try {
 			member = this.memberDaoMYSQL.read(this.memberId);
 			if (member != null) {
@@ -70,8 +71,8 @@ public class PaymentWindowController implements Initializable {
 
 	}
 
-	private void decidePayment() {
-		paymentCalculator = new PaymentCalculator(member);
+	private void decidePayment() throws SQLException {
+		paymentCalculator = new PaymentCalculator(member, this.calculationConfigurationDaoMYSQL.readLastConfig());
 
 		if (paymentCalculator.getDaysSinceLastPayment() == 0) {
 			this.paymentButton.setDisable(true);
@@ -100,7 +101,6 @@ public class PaymentWindowController implements Initializable {
 
 	public void setMemberDaoMYSQL(MemberDaoMYSQL memberDaoMYSQL) {
 		this.memberDaoMYSQL = memberDaoMYSQL;
-		writeToForm();
 	}
 
 	public void setMember(Member member) {
@@ -124,8 +124,8 @@ public class PaymentWindowController implements Initializable {
 					MemberPayment.MONTHLY));
 
 			// if also pay the penalty
-			if (this.paymentCalculator.getTotalRoutinePayment() > Calculation
-					.getMemberMonthlyPayment()) {
+			if (this.paymentCalculator.getTotalRoutinePayment() > this.calculationConfigurationDaoMYSQL
+					.readLastConfig().getMemberRoutinePayment()) {
 				this.memberPaymentDaoMYSQL.write(new MemberPayment(
 						this.memberId, this.paymentCalculator
 								.getTotalRoutinePayment(),
@@ -157,5 +157,13 @@ public class PaymentWindowController implements Initializable {
 			MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL) {
 		this.memberPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
+	
+	public void setPaymentCalculator(PaymentCalculator paymentCalculator) {
+		this.paymentCalculator = paymentCalculator;
+	}
 
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
+	}
 }

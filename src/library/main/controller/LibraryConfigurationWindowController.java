@@ -8,8 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import library.main.model.Admin;
+import library.main.model.CalculationConfiguration;
 import library.main.util.AdminDaoMYSQL;
-import library.main.util.Calculation;
+import library.main.util.CalculationConfigurationDaoMYSQL;
+import library.main.util.ErrorMessageWindowLoader;
 
 public class LibraryConfigurationWindowController {
 
@@ -34,19 +36,19 @@ public class LibraryConfigurationWindowController {
 	private Text weakAccountText;
 
 	@FXML
-	private TextField memberMonthlyPaymentTextField;
+	private TextField memberRoutinePaymentTextField;
 
 	@FXML
 	private TextField memberPenaltyPaymentTextField;
+
+	@FXML
+	private TextField memberMaxDaysOfPayment;
 
 	@FXML
 	private TextField bookPenaltyPaymentTextField;
 
 	@FXML
 	private TextField bookMaxDaysOfBorrowingTextField;
-
-	@FXML
-	private TextField memberDaysOfRoutinePayment;
 
 	@FXML
 	private Button submitForCalculationButton;
@@ -58,6 +60,8 @@ public class LibraryConfigurationWindowController {
 	private Text errorForCalculationText;
 
 	private AdminDaoMYSQL adminDaoMYSQL;
+
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@FXML
 	public void handleEditForAdminAccount() {
@@ -103,11 +107,12 @@ public class LibraryConfigurationWindowController {
 	@FXML
 	public void handleEditForCalculationButton() {
 
-		this.memberMonthlyPaymentTextField.setDisable(false);
+		this.memberRoutinePaymentTextField.setDisable(false);
 		this.memberPenaltyPaymentTextField.setDisable(false);
+		this.memberMaxDaysOfPayment.setDisable(false);
+
 		this.bookPenaltyPaymentTextField.setDisable(false);
 		this.bookMaxDaysOfBorrowingTextField.setDisable(false);
-		this.memberDaysOfRoutinePayment.setDisable(false);
 
 		this.editForCalculationButton.setDisable(true);
 		this.submitForCalculationButton.setDisable(false);
@@ -117,7 +122,9 @@ public class LibraryConfigurationWindowController {
 	public void handleSubmitForCalculation() {
 		try {
 
-			String memberMonthlyPaymentString = this.memberMonthlyPaymentTextField
+			String memberRoutinePaymentString = this.memberRoutinePaymentTextField
+					.getText();
+			String memberMaxDaysOfPaymentString = this.memberMaxDaysOfPayment
 					.getText();
 			String memberPenaltyPaymentString = this.memberPenaltyPaymentTextField
 					.getText();
@@ -125,70 +132,85 @@ public class LibraryConfigurationWindowController {
 					.getText();
 			String bookMaxDaysOfBorrowingString = this.bookMaxDaysOfBorrowingTextField
 					.getText();
-			String memberDaysOfRoutinePaymentString = this.memberDaysOfRoutinePayment
-					.getText();
 
-			if (memberMonthlyPaymentString.matches(DIGIT)
+			if (memberRoutinePaymentString.matches(DIGIT)
+					&& memberMaxDaysOfPaymentString.matches(DIGIT)
 					&& memberPenaltyPaymentString.matches(DIGIT)
 					&& bookPenaltyPaymentString.matches(DIGIT)
-					&& bookMaxDaysOfBorrowingString.matches(DIGIT)
-					&& memberDaysOfRoutinePaymentString.matches(DIGIT)) {
+					&& bookMaxDaysOfBorrowingString.matches(DIGIT)) {
 
-				Calculation.setMemberMonthlyPayment(Long
-						.parseLong(memberMonthlyPaymentString));
-				Calculation.setMemberPenaltyPayment(Long
+				CalculationConfiguration calculationConfiguration = new CalculationConfiguration();
+
+				calculationConfiguration.setMemberRoutinePayment(Long
+						.parseLong(memberRoutinePaymentString));
+				calculationConfiguration.setMemberPenaltyPayment(Long
 						.parseLong(memberPenaltyPaymentString));
-				Calculation.setBookPenaltyPayment(Long
+				calculationConfiguration.setMemberMaxDaysOfPayment(Long
+						.parseLong(memberMaxDaysOfPaymentString));
+
+				calculationConfiguration.setBookPenaltyPayment(Long
 						.parseLong(bookPenaltyPaymentString));
-				Calculation.setBookMaxDaysOfBorrowing(Long
+				calculationConfiguration.setBookMaxDaysOfBorrowing(Long
 						.parseLong(bookMaxDaysOfBorrowingString));
-				Calculation.setMemberMaxDaysOfPayment(Long
-						.parseLong(memberDaysOfRoutinePaymentString));
+
+				this.calculationConfigurationDaoMYSQL
+						.write(calculationConfiguration);
 
 				this.submitForCalculationButton.setDisable(true);
 				this.editForCalculationButton.setDisable(false);
 
-				this.memberMonthlyPaymentTextField.setDisable(true);
+				this.memberRoutinePaymentTextField.setDisable(true);
 				this.memberPenaltyPaymentTextField.setDisable(true);
+				this.memberMaxDaysOfPayment.setDisable(true);
+
 				this.bookPenaltyPaymentTextField.setDisable(true);
 				this.bookMaxDaysOfBorrowingTextField.setDisable(true);
-				this.memberDaysOfRoutinePayment.setDisable(true);
+
 			} else {
 				this.errorForCalculationText.setVisible(true);
 			}
 		} catch (NumberFormatException | SQLException e) {
-			e.printStackTrace();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL)
+			throws SQLException {
 		this.adminDaoMYSQL = adminDaoMYSQL;
-		try {
-			writeAdmin();
-			writeCalculation();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		writeAdminConfiguration();
 	}
 
-	private void writeCalculation() {
-		this.memberMonthlyPaymentTextField.setText(Calculation
-				.getMemberMonthlyPayment() + "");
-		this.memberPenaltyPaymentTextField.setText(Calculation
+	private void writeCalculationConfiguration() throws SQLException {
+
+		CalculationConfiguration lastCalculationConfiguration = this.calculationConfigurationDaoMYSQL
+				.readLastConfig();
+
+		this.memberRoutinePaymentTextField.setText(lastCalculationConfiguration
+				.getMemberRoutinePayment() + "");
+		this.memberPenaltyPaymentTextField.setText(lastCalculationConfiguration
 				.getMemberPenaltyPayment() + "");
-		this.bookPenaltyPaymentTextField.setText(Calculation
-				.getBookPenaltyPayment() + "");
-		this.bookMaxDaysOfBorrowingTextField.setText(Calculation
-				.getBookMaxDaysOfBorrowing() + "");
-		this.memberDaysOfRoutinePayment.setText(Calculation
+		this.memberMaxDaysOfPayment.setText(lastCalculationConfiguration
 				.getMemberMaxDaysOfPayment() + "");
+
+		this.bookPenaltyPaymentTextField.setText(lastCalculationConfiguration
+				.getBookPenaltyPayment() + "");
+		this.bookMaxDaysOfBorrowingTextField
+				.setText(lastCalculationConfiguration
+						.getBookMaxDaysOfBorrowing() + "");
 	}
 
-	private void writeAdmin() throws SQLException {
+	private void writeAdminConfiguration() throws SQLException {
 		Admin admin = this.adminDaoMYSQL.read();
 		this.usernameTextField.setText(admin.getUsername());
 		this.passwordField.setText(admin.getPassword());
 		this.emailTextField.setText(admin.getEmail());
+	}
+
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL)
+			throws SQLException {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
+		writeCalculationConfiguration();
 	}
 
 }

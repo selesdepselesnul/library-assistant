@@ -20,6 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import library.main.model.Member;
 import library.main.model.MemberPayment;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.MemberDaoMYSQL;
 import library.main.util.MemberPaymentDaoMYSQL;
@@ -77,6 +78,8 @@ public class NewMemberFormController implements Initializable {
 
 	private Runnable runnable;
 
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
@@ -117,8 +120,9 @@ public class NewMemberFormController implements Initializable {
 				member.setPhoto(memberPhotoDaoFS
 						.insertPhotoMember(this.sourcePhotoPath));
 				this.memberDaoMYSQL.update(member);
-				this.memberMonthlyPaymentDaoMYSQL
-				.write(new MemberPayment(member.getId()));
+				this.memberMonthlyPaymentDaoMYSQL.write(new MemberPayment(
+						member.getId(), this.calculationConfigurationDaoMYSQL
+								.readLastConfig().getMemberRoutinePayment()));
 			} else {
 				Member oldMember = this.memberDaoMYSQL.read(this.memberId);
 				member.setId(oldMember.getId());
@@ -136,7 +140,7 @@ public class NewMemberFormController implements Initializable {
 				this.memberDaoMYSQL.update(member);
 			}
 			this.member = member;
-			if(this.runnable != null) {
+			if (this.runnable != null) {
 				this.runnable.run();
 			}
 			this.stage.close();
@@ -228,6 +232,11 @@ public class NewMemberFormController implements Initializable {
 
 	public void doBeforeExit(Runnable runnable) {
 		this.runnable = runnable;
+	}
+
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
 	}
 
 }

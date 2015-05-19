@@ -13,10 +13,10 @@ import javafx.scene.chart.XYChart.Series;
 public class IncomingMemberLineChartUtil {
 
 	private MemberDaoMYSQL memberDaoMYSQL;
-	private LineChart<String, Number> incomingMemberByMonthLineChart;
+	private LineChart<String, Integer> incomingMemberByMonthLineChart;
 
 	public IncomingMemberLineChartUtil(
-			LineChart<String, Number> incomingMemberByMonthLineChart,
+			LineChart<String, Integer> incomingMemberByMonthLineChart,
 			MemberDaoMYSQL memberDaoMYSQL) throws SQLException {
 
 		this.memberDaoMYSQL = memberDaoMYSQL;
@@ -26,13 +26,14 @@ public class IncomingMemberLineChartUtil {
 
 	public void reloadData() throws SQLException {
 		int monthInt = 1;
-		int i = 0;
 		List<String> monthList = Arrays.asList("Jan", "Feb", "Mar", "Apr",
 				"Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des");
 		CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setLabel("Bulan");
-		Series incomingMemberSeries = new XYChart.Series();
+
+		Series<String, Integer> incomingMemberSeries = new XYChart.Series<String, Integer>();
 		incomingMemberSeries.setName("jumlah anggota masuk");
+
 		for (String monthString : monthList) {
 
 			String monthGlob = "0" + monthInt;
@@ -45,9 +46,9 @@ public class IncomingMemberLineChartUtil {
 									LocalDate.now().getYear() + "")));
 			monthInt++;
 		}
+		
 		this.incomingMemberByMonthLineChart.getData().setAll(
 				incomingMemberSeries);
-
 	}
 
 }

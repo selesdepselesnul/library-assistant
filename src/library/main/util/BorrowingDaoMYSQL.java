@@ -95,8 +95,7 @@ public class BorrowingDaoMYSQL {
 				"SELECT b.id, b.memberId, b.bookId, b.timeOfBorrowing "
 						+ "FROM Borrowing AS b "
 						+ "INNER JOIN IndividualBook AS i "
-						+ "ON b.bookId = i.id " 
-						+ "WHERE i.isAvailable = 0 "
+						+ "ON b.bookId = i.id " + "WHERE i.isAvailable = 0 "
 						+ "AND b.timeOfReturning IS NULL");
 		List<Borrowing> borrowingList = new ArrayList<>();
 		while (resultSet.next()) {
@@ -127,14 +126,13 @@ public class BorrowingDaoMYSQL {
 	// return borrowingId;
 	// }
 
-	public List<BorrowingHistory> readBasedOnMemberId(long memberId)
-			throws SQLException {
+	public List<BorrowingHistory> readBasedOnMemberId(long memberId,
+			long bookPenaltyPayment) throws SQLException {
 		PreparedStatement prep = this.connection
 				.prepareStatement("SELECT b.bookId, b.timeOfBorrowing "
 						+ "FROM Borrowing AS b "
 						+ "INNER JOIN IndividualBook AS i "
-						+ "ON b.bookId = i.id " 
-						+ "WHERE i.isAvailable = 0 "
+						+ "ON b.bookId = i.id " + "WHERE i.isAvailable = 0 "
 						+ "AND b.memberId = ? "
 						+ "AND b.timeOfReturning IS NULL");
 		prep.setLong(1, memberId);
@@ -144,9 +142,7 @@ public class BorrowingDaoMYSQL {
 		while (resultSet.next()) {
 			LocalDate timeOfBorrowing = resultSet.getDate(2).toLocalDate();
 			BorrowingHistory borrowingHistory = new BorrowingHistory(
-					resultSet.getLong(1), timeOfBorrowing,
-					BookBorrowingCalculator
-							.calculatePinaltyPayment(timeOfBorrowing));
+					resultSet.getLong(1), timeOfBorrowing, bookPenaltyPayment);
 			borrowingHistoryList.add(borrowingHistory);
 		}
 		resultSet.close();
@@ -157,8 +153,7 @@ public class BorrowingDaoMYSQL {
 		ResultSet resultSet = this.connection.createStatement().executeQuery(
 				"SELECT COUNT(*) FROM Borrowing AS b "
 						+ "INNER JOIN IndividualBook AS i "
-						+ "ON b.bookId = i.id " 
-						+ "WHERE i.isAvailable = 0");
+						+ "ON b.bookId = i.id " + "WHERE i.isAvailable = 0");
 		resultSet.next();
 		int count = resultSet.getInt(1);
 		return count;
@@ -173,6 +168,5 @@ public class BorrowingDaoMYSQL {
 		return idOfBorrowing;
 
 	}
-
 
 }

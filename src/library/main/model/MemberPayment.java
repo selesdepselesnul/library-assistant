@@ -1,6 +1,5 @@
 package library.main.model;
 
-import library.main.util.Calculation;
 
 public class MemberPayment {
 
@@ -11,9 +10,9 @@ public class MemberPayment {
 	public static final String MONTHLY = "monthly";
 	public static final String PENALTY = "penalty";
 
-	public MemberPayment(long memberId) {
+	public MemberPayment(long memberId, long amount) {
 		this.memberId = memberId;
-		this.amount = Calculation.getMemberMonthlyPayment();
+		this.amount = amount;
 		this.paymentMode = MemberPayment.MONTHLY;
 	}
 

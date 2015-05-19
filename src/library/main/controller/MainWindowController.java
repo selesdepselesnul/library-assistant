@@ -30,6 +30,7 @@ import library.main.util.BookDaoMYSQL;
 import library.main.util.BookPenaltyDaoMYSQL;
 import library.main.util.BookPieChartUtil;
 import library.main.util.BorrowingDaoMYSQL;
+import library.main.util.CalculationConfigurationDaoMYSQL;
 import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.IndividualBookDaoMYSQL;
@@ -45,7 +46,7 @@ public class MainWindowController implements Initializable {
 	private PieChart bookPieChart;
 
 	@FXML
-	private LineChart<String, Number> incomingMemberByMonthLineChart;
+	private LineChart<String, Integer> incomingMemberByMonthLineChart;
 
 	@FXML
 	private TextField memberIdTextField;
@@ -72,6 +73,8 @@ public class MainWindowController implements Initializable {
 	private BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL;
 
 	private AdminDaoMYSQL adminDaoMYSQL;
+
+	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -119,6 +122,8 @@ public class MainWindowController implements Initializable {
 											NewMemberFormController newMemberFormController = (NewMemberFormController) fxmlLoader
 													.getController();
 											newMemberFormController
+													.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+											newMemberFormController
 													.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
 											newMemberFormController
 													.doBeforeExit(() -> {
@@ -148,10 +153,6 @@ public class MainWindowController implements Initializable {
 		} catch (IOException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
-	}
-
-	private void showError(Exception e) {
-		new ErrorMessageWindowLoader(e.getMessage()).show();
 	}
 
 	@FXML
@@ -222,6 +223,44 @@ public class MainWindowController implements Initializable {
 	}
 
 	@FXML
+	public void handleReportLibraryCalculation() {
+		try {
+			TextColumnBuilder<Long> idColumn = Columns.column("id", "id",
+					DynamicReports.type.longType());
+			TextColumnBuilder<String> timeStampOfConfiguringColumn = Columns
+					.column("waktu konfigurasi", "timeStampOfConfiguration",
+							DynamicReports.type.stringType());
+			TextColumnBuilder<Long> memberRoutinePaymentColumn = Columns
+					.column("iuran tetap anggota", "memberRoutinePayment",
+							DynamicReports.type.longType());
+			TextColumnBuilder<Long> memberPenaltyPaymentColumn = Columns
+					.column("denda anggota", "memberPenaltyPayment",
+							DynamicReports.type.longType());
+			TextColumnBuilder<Long> memberMaxdaysOfPaymentColumn = Columns
+					.column("maksimal hari pembayaran",
+							"memberMaxDaysOfPayment",
+							DynamicReports.type.longType());
+			TextColumnBuilder<Long> bookPenaltyPaymentColumn = Columns.column(
+					"denda buku", "bookPenaltyPayment",
+					DynamicReports.type.longType());
+			TextColumnBuilder<Long> maxDaysOfBorrowingColumn = Columns.column(
+					"maksimal hari peminjaman", "bookMaxDaysOfBorrowing",
+					DynamicReports.type.longType());
+			LibraryReporter libraryReporter = new LibraryReporter(
+					"laporan iuran & denda perpustakaan",
+					calculationConfigurationDaoMYSQL.readAll(),
+					"laporan iuran & denda", false);
+			libraryReporter.addColumns(idColumn, timeStampOfConfiguringColumn,
+					memberRoutinePaymentColumn, memberPenaltyPaymentColumn,
+					memberMaxdaysOfPaymentColumn, bookPenaltyPaymentColumn,
+					maxDaysOfBorrowingColumn);
+			libraryReporter.show();
+		} catch (DRException | SQLException e) {
+			new ErrorMessageWindowLoader(e.getMessage()).show();
+		}
+	}
+
+	@FXML
 	public void handleUpdateMenuItem() {
 		try {
 			long memberId = Long.parseLong(this.memberIdTextField.getText());
@@ -247,7 +286,8 @@ public class MainWindowController implements Initializable {
 													.writeToForm(this.memberDaoMYSQL
 															.read(memberId));
 										} catch (Exception e) {
-											showError(e);
+											new ErrorMessageWindowLoader(e
+													.getMessage()).show();
 										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
@@ -280,13 +320,15 @@ public class MainWindowController implements Initializable {
 									.setMemberDaoMYSQL(this.memberDaoMYSQL);
 							memberTableFormController
 									.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+							memberTableFormController
+									.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
 						} catch (Exception e) {
-							showError(e);
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
 					}).show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -321,14 +363,19 @@ public class MainWindowController implements Initializable {
 												.setMemberDaoMYSQL(this.memberDaoMYSQL);
 										paymentWindowController
 												.setMemberMonthlyPaymentDaoMYSQL(this.memberMonthlyPaymentDaoMYSQL);
+										paymentWindowController
+												.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+										paymentWindowController.writeToForm();
 										this.memberIdTextField.clear();
 
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
+							e.printStackTrace();
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
+			e.printStackTrace();
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
@@ -359,7 +406,7 @@ public class MainWindowController implements Initializable {
 						}
 					}).show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 
 	}
@@ -386,7 +433,7 @@ public class MainWindowController implements Initializable {
 						}
 					}).show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 
 	}
@@ -522,6 +569,8 @@ public class MainWindowController implements Initializable {
 											borrowingBookDetailController
 													.setBorrowingDaoMYSQL(this.borrowingDaoMYSQL);
 											borrowingBookDetailController
+													.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+											borrowingBookDetailController
 													.setBookPenaltyPaymentDaoMYSQL(this.bookPenaltyPaymentDaoMYSQL);
 											Borrowing borrowing = this.borrowingDaoMYSQL
 													.read(idOfBorrowing);
@@ -576,7 +625,7 @@ public class MainWindowController implements Initializable {
 							statisticDetailController.writeStatistic();
 
 						} catch (Exception e) {
-							showError(e);
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
 					}).show(WindowLoader.SHOW_AND_WAITING);
@@ -593,10 +642,12 @@ public class MainWindowController implements Initializable {
 					"Riwayat Peminjaman",
 					(fxmlLoader, stage) -> {
 						try {
-							List<BorrowingHistory> borrowingHistoryList = borrowingDaoMYSQL
-									.readBasedOnMemberId(Long
-											.parseLong(this.memberIdTextField
-													.getText()));
+							List<BorrowingHistory> borrowingHistoryList = borrowingDaoMYSQL.readBasedOnMemberId(
+									Long.parseLong(this.memberIdTextField
+											.getText()),
+									this.calculationConfigurationDaoMYSQL
+											.readLastConfig()
+											.getBookPenaltyPayment());
 							BorrowingHistoryController borrowingHistoryController = (BorrowingHistoryController) fxmlLoader
 									.getController();
 							borrowingHistoryController
@@ -607,10 +658,8 @@ public class MainWindowController implements Initializable {
 					}).show(WindowLoader.SHOW_AND_WAITING);
 
 			this.memberIdTextField.clear();
-		} catch (NumberFormatException e) {
-			showError(e);
-		} catch (IOException e) {
-			showError(e);
+		} catch (NumberFormatException | IOException e) {
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -630,13 +679,11 @@ public class MainWindowController implements Initializable {
 									.setBorrowingList(borrowingList);
 							this.memberIdTextField.clear();
 						} catch (Exception e) {
-							showError(e);
+							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 					}).show(WindowLoader.SHOW_AND_WAITING);
-		} catch (IOException e) {
-			showError(e);
-		} catch (NumberFormatException e) {
-			showError(e);
+		} catch (IOException | NumberFormatException e) {
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -646,7 +693,7 @@ public class MainWindowController implements Initializable {
 			new WindowLoader("library/main/view/AboutPage.fxml", "About", null)
 					.show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 
 	}
@@ -692,7 +739,7 @@ public class MainWindowController implements Initializable {
 					notAvailableAmountColumn, amountColumn);
 			libraryReporter.show();
 		} catch (DRException | SQLException e) {
-			showError(e);
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
@@ -765,17 +812,25 @@ public class MainWindowController implements Initializable {
 									"library/main/view/LibraryConfigurationWindow.fxml",
 									"Konfigurasi",
 									(fxmlLoader, stage) -> {
-										LibraryConfigurationWindowController libraryConfigurationWindowController = (LibraryConfigurationWindowController) fxmlLoader
-												.getController();
-										libraryConfigurationWindowController
-												.setAdminDaoMYSQL(adminDaoMYSQL);
+										try {
+											LibraryConfigurationWindowController libraryConfigurationWindowController = (LibraryConfigurationWindowController) fxmlLoader
+													.getController();
+											libraryConfigurationWindowController
+													.setAdminDaoMYSQL(this.adminDaoMYSQL);
+											libraryConfigurationWindowController
+													.setCalculationConfigurationDaoMYSQL(this.calculationConfigurationDaoMYSQL);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
 									}).show(WindowLoader.SHOW_AND_WAITING);
 						} catch (Exception e) {
+							e.printStackTrace();
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
 					}, this.adminDaoMYSQL).showAndWait();
 		} catch (IOException e) {
+			e.printStackTrace();
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
@@ -811,4 +866,9 @@ public class MainWindowController implements Initializable {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 
+	public void setCalculationConfigurationDaoMYSQL(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
+		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
+	}
+	
 }

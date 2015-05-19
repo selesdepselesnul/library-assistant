@@ -7,21 +7,27 @@ import java.time.temporal.ChronoUnit;
 public class BookBorrowingCalculator {
 
 	public static long calculatePinaltyPayment(
-			BorrowingDaoMYSQL borrowingDaoMYSQL, long borrowingId)
-			throws SQLException {
+			BorrowingDaoMYSQL borrowingDaoMYSQL,
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL,
+			long borrowingId) throws SQLException {
 		LocalDate timeOfBorrowing = borrowingDaoMYSQL.read(borrowingId)
 				.getTimeOfBorrowing();
-		return calculatePinaltyPayment(timeOfBorrowing);
+		return calculatePinaltyPayment(calculationConfigurationDaoMYSQL,
+				timeOfBorrowing);
 	}
 
-	public static long calculatePinaltyPayment(LocalDate timeOfBorrowing) {
+	public static long calculatePinaltyPayment(
+			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL,
+			LocalDate timeOfBorrowing) throws SQLException {
 		long dayOfBorrowing = ChronoUnit.DAYS.between(timeOfBorrowing,
 				LocalDate.now());
-		dayOfBorrowing -= Calculation.getBookMaxDaysOfBorrowing();
+		dayOfBorrowing -= calculationConfigurationDaoMYSQL.readLastConfig()
+				.getBookMaxDaysOfBorrowing();
 		long totalAmountOfPinalty = 0;
 		if (dayOfBorrowing > 0) {
 			totalAmountOfPinalty = dayOfBorrowing
-					* Calculation.getBookPenaltyPayment();
+					* calculationConfigurationDaoMYSQL.readLastConfig()
+							.getBookPenaltyPayment();
 		}
 		return totalAmountOfPinalty;
 

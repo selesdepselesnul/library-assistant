@@ -58,11 +58,11 @@
 								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
 									<items>
 										<MenuItem mnemonicParsing="false" onAction="#handleUpdateMenuItem" text="perbaharui" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+										<SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handlePaymentMenuItem" text="iuran" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+										<SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleSeeBorrowingBookByMember" text="lihat peminjaman" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+										<SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleDeleteMenuItem" text="hapus" />
 									</items>
 								</SplitMenuButton>
@@ -109,9 +109,9 @@
 								<SplitMenuButton mnemonicParsing="false" text="Pilih aksi" GridPane.columnIndex="2">
 									<items>
 										<MenuItem mnemonicParsing="false" onAction="#handleBookUpdatingMenuItem" text="perbaharui" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+										<SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleSeeDetailOfBookMenuItem" text="lihat detail" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+										<SeparatorMenuItem mnemonicParsing="false" />
 										<MenuItem mnemonicParsing="false" onAction="#handleDeleteBookMenuItem" text="hapus" />
 									</items>
 								</SplitMenuButton>
@@ -217,6 +217,12 @@
 								<MenuItem mnemonicParsing="false" onAction="#handlePaymentReportMenuItem" text="pembayaran">
 									<accelerator>
 										<KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<SeparatorMenuItem mnemonicParsing="false" />
+								<MenuItem mnemonicParsing="false" onAction="#handleReportLibraryCalculation" text="tetapan kalkulasi">
+									<accelerator>
+										<KeyCodeCombination alt="DOWN" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 									</accelerator>
 								</MenuItem>
 							</items>
