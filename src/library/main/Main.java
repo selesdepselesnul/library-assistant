@@ -7,6 +7,7 @@ import simpleui.util.WindowLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import library.main.controller.LoginPanelController;
+import library.main.util.LibraryAssistantResourcesPath;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.mysql.BookDaoMYSQL;
 import library.main.util.dao.mysql.BookPenaltyDaoMYSQL;
@@ -30,7 +31,7 @@ public class Main extends Application {
 						try {
 
 							MYSQLConfigurationDaoFS mysqlConfigurationDaoFS = new MYSQLConfigurationDaoFS(
-									"resources/properties/sql.dat");
+									LibraryAssistantResourcesPath.SQL_CONFIG_PATH);
 							MYSQLConfiguration mysqlConfiguration = mysqlConfigurationDaoFS
 									.read();
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
@@ -45,7 +46,7 @@ public class Main extends Application {
 							// and the life is begun :v
 							loginPanelController
 									.setAdminDaoMYSQL(new AdminDaoFS(
-											"resources/properties/admin.dat"));
+											LibraryAssistantResourcesPath.ADMIN_CONFIG_PATH));
 
 							Connection connectionWithSelectedDBase = new MYSQLConnector(
 									mysqlConfiguration, "library")

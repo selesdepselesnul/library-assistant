@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import javafx.scene.image.Image;
 import library.main.model.Member;
+import library.main.util.LibraryAssistantResourcesPath;
 
 /**
  * @author morrisseymarr
@@ -17,7 +18,7 @@ import library.main.model.Member;
 public class MemberPhotoDaoFS {
 	public static final String NO_PHOTO = "library/main/resources/images/no_photo.png";
 	public static final Path MEMBER_PHOTO_PATH = Paths
-			.get("../resources/images");
+			.get(LibraryAssistantResourcesPath.IMAGES_PATH);
 	public static final Image DEFAULT_IMAGE = new Image(
 			ClassLoader
 					.getSystemResourceAsStream("library/main/resources/images/your_face_here.png"));
@@ -53,7 +54,7 @@ public class MemberPhotoDaoFS {
 
 		String memberPhoto = this.member.getPhoto();
 
-		if (memberPhoto == null || memberPhoto.equalsIgnoreCase("NONE")) { 
+		if (memberPhoto == null || memberPhoto.equalsIgnoreCase("NONE")) {
 			// if photo doesn't exist
 			this.member.setPhoto(MEMBER_PHOTO_PATH.resolve(
 					this.member.getId() + "").toString());
@@ -65,7 +66,6 @@ public class MemberPhotoDaoFS {
 		Files.copy(sourcePhotoPath, Paths.get(this.member.getPhoto()));
 		return this.member.getPhoto();
 	}
-
 
 	public InputStream readPhotoMember() throws IOException {
 		InputStream photoInputStream = ClassLoader
