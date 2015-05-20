@@ -9,6 +9,9 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import simpleui.util.ErrorMessageWindowLoader;
+import simpleui.util.PasswordAskerWindow;
+import simpleui.util.WindowLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -19,14 +22,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import library.main.model.Book;
 import library.main.model.IndividualBook;
-import library.main.util.AdminDaoMYSQL;
-import library.main.util.BookDaoMYSQL;
 import library.main.util.BookGrouper;
 import library.main.util.BookPieChartUtil;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.IndividualBookDaoMYSQL;
-import library.main.util.PasswordAskerWindow;
-import library.main.util.WindowLoader;
+import library.main.util.dao.filesystem.AdminDaoFS;
+import library.main.util.dao.mysql.BookDaoMYSQL;
+import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
 
 public class BookTableFormController implements Initializable {
 
@@ -69,7 +69,7 @@ public class BookTableFormController implements Initializable {
 
 	private IndividualBookDaoMYSQL individualBookDaoMYSQL;
 
-	private AdminDaoMYSQL adminDaoMYSQL;
+	private AdminDaoFS adminDaoMYSQL;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -319,7 +319,7 @@ public class BookTableFormController implements Initializable {
 		this.deleteAllBooksMenuItem.setDisable(isDisable);
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+	public void setAdminDaoMYSQL(AdminDaoFS adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 

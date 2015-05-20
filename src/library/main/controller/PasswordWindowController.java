@@ -1,7 +1,7 @@
 package library.main.controller;
 
+import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import library.main.util.AdminDaoMYSQL;
+import library.main.util.dao.filesystem.AdminDaoFS;
 
 public class PasswordWindowController implements Initializable {
 
@@ -26,7 +26,7 @@ public class PasswordWindowController implements Initializable {
 
 	private Stage stage;
 
-	private AdminDaoMYSQL adminDaoMYSQL;
+	private AdminDaoFS adminDaoMYSQL;
 
 	private boolean isCloseSystem;
 
@@ -56,7 +56,7 @@ public class PasswordWindowController implements Initializable {
 			} else {
 				this.passwordNotMatchedText.setVisible(true);
 			}
-		} catch (SQLException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -70,7 +70,7 @@ public class PasswordWindowController implements Initializable {
 		this.stage = stage;
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+	public void setAdminDaoMYSQL(AdminDaoFS adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 

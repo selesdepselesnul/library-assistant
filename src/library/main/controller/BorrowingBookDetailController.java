@@ -10,9 +10,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import library.main.model.BookPenalty;
 import library.main.util.BookBorrowingCalculator;
-import library.main.util.BookPenaltyDaoMYSQL;
-import library.main.util.BorrowingDaoMYSQL;
-import library.main.util.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.BookPenaltyDaoMYSQL;
+import library.main.util.dao.mysql.BorrowingDaoMYSQL;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 
 public class BorrowingBookDetailController implements Initializable {
 

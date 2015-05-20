@@ -1,4 +1,4 @@
-package library.main.util;
+package simpleui.util;
 
 import java.io.IOException;
 import java.util.function.BiConsumer;

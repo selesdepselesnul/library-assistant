@@ -1,7 +1,9 @@
 package library.main.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
+import simpleui.util.ErrorMessageWindowLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -9,9 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import library.main.model.Admin;
 import library.main.model.CalculationConfiguration;
-import library.main.util.AdminDaoMYSQL;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
+import library.main.util.dao.filesystem.AdminDaoFS;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 
 public class LibraryConfigurationWindowController {
 
@@ -59,7 +60,7 @@ public class LibraryConfigurationWindowController {
 	@FXML
 	private Text errorForCalculationText;
 
-	private AdminDaoMYSQL adminDaoMYSQL;
+	private AdminDaoFS adminDaoMYSQL;
 
 	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
@@ -84,7 +85,7 @@ public class LibraryConfigurationWindowController {
 
 			if (notEmpty && admin.getPassword().matches(".{8,}")) {
 
-				this.adminDaoMYSQL.update(admin);
+				this.adminDaoMYSQL.updateIfExist(admin);
 
 				this.usernameTextField.setDisable(true);
 				this.passwordField.setDisable(true);
@@ -99,7 +100,7 @@ public class LibraryConfigurationWindowController {
 
 			}
 
-		} catch (SQLException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -174,8 +175,8 @@ public class LibraryConfigurationWindowController {
 		}
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL)
-			throws SQLException {
+	public void setAdminDaoMYSQL(AdminDaoFS adminDaoMYSQL)
+			throws ClassNotFoundException, IOException {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 		writeAdminConfiguration();
 	}
@@ -199,7 +200,7 @@ public class LibraryConfigurationWindowController {
 						.getBookMaxDaysOfBorrowing() + "");
 	}
 
-	private void writeAdminConfiguration() throws SQLException {
+	private void writeAdminConfiguration() throws ClassNotFoundException, IOException {
 		Admin admin = this.adminDaoMYSQL.read();
 		this.usernameTextField.setText(admin.getUsername());
 		this.passwordField.setText(admin.getPassword());

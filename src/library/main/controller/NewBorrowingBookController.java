@@ -3,12 +3,12 @@ package library.main.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import simpleui.util.ErrorMessageWindowLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import library.main.model.Borrowing;
-import library.main.util.BorrowingDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
+import library.main.util.dao.mysql.BorrowingDaoMYSQL;
 
 public class NewBorrowingBookController {
 

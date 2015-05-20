@@ -1,4 +1,4 @@
-package library.main.util;
+package library.main.util.dao.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

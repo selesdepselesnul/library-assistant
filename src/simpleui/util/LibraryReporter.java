@@ -1,4 +1,4 @@
-package library.main.util;
+package simpleui.util;
 
 import java.awt.Color;
 import java.util.Collection;

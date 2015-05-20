@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+import simpleui.util.ErrorMessageWindowLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,11 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.Member;
 import library.main.model.MemberPayment;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberPaymentDaoMYSQL;
 import library.main.util.PaymentCalculator;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
+import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
 
 public class PaymentWindowController implements Initializable {
 

@@ -1,4 +1,4 @@
-package library.main.util;
+package library.main.util.dao.filesystem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import javafx.scene.image.Image;
 import library.main.model.Member;
 
+/**
+ * @author morrisseymarr
+ *
+ */
 public class MemberPhotoDaoFS {
 	public static final String NO_PHOTO = "library/main/resources/images/no_photo.png";
 	public static final Path MEMBER_PHOTO_PATH = Paths
@@ -46,8 +50,11 @@ public class MemberPhotoDaoFS {
 	}
 
 	public String updatePhotoMember(Path sourcePhotoPath) throws IOException {
+
 		String memberPhoto = this.member.getPhoto();
-		if (memberPhoto == null || memberPhoto.equalsIgnoreCase("NONE")) {
+
+		if (memberPhoto == null || memberPhoto.equalsIgnoreCase("NONE")) { 
+			// if photo doesn't exist
 			this.member.setPhoto(MEMBER_PHOTO_PATH.resolve(
 					this.member.getId() + "").toString());
 		} else {
@@ -58,6 +65,7 @@ public class MemberPhotoDaoFS {
 		Files.copy(sourcePhotoPath, Paths.get(this.member.getPhoto()));
 		return this.member.getPhoto();
 	}
+
 
 	public InputStream readPhotoMember() throws IOException {
 		InputStream photoInputStream = ClassLoader

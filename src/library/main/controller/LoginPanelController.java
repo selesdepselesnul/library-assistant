@@ -2,9 +2,12 @@ package library.main.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+import simpleui.util.ErrorMessageWindowLoader;
+import simpleui.util.WindowLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,16 +21,14 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.main.model.Admin;
-import library.main.util.AdminDaoMYSQL;
-import library.main.util.BookDaoMYSQL;
-import library.main.util.BookPenaltyDaoMYSQL;
-import library.main.util.BorrowingDaoMYSQL;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.IndividualBookDaoMYSQL;
-import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberPaymentDaoMYSQL;
-import library.main.util.WindowLoader;
+import library.main.util.dao.filesystem.AdminDaoFS;
+import library.main.util.dao.mysql.BookDaoMYSQL;
+import library.main.util.dao.mysql.BookPenaltyDaoMYSQL;
+import library.main.util.dao.mysql.BorrowingDaoMYSQL;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
+import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
 
 public class LoginPanelController implements Initializable {
 
@@ -60,7 +61,7 @@ public class LoginPanelController implements Initializable {
 
 	private BookPenaltyDaoMYSQL bookPenaltyDaoMYSQL;
 
-	private AdminDaoMYSQL adminDaoMYSQL;
+	private AdminDaoFS adminDaoMYSQL;
 
 	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
@@ -90,6 +91,12 @@ public class LoginPanelController implements Initializable {
 	public void handleOkButton() {
 
 		try {
+
+			if (!Files.exists(Paths.get(this.adminDaoMYSQL.getAdminPath()))) {
+				this.adminDaoMYSQL.updateIfExist(new Admin("root",
+						"indonesiaraya"));
+			}
+
 			Admin admin = new Admin(this.usernameTextField.getText(),
 					this.passwordField.getText());
 			if (this.adminDaoMYSQL.read().equals(admin)) {
@@ -139,7 +146,7 @@ public class LoginPanelController implements Initializable {
 			} else {
 				this.accountErrorLabel.setVisible(true);
 			}
-		} catch (SQLException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
@@ -176,7 +183,7 @@ public class LoginPanelController implements Initializable {
 		this.bookPenaltyDaoMYSQL = bookPenaltyDaoMYSQL;
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+	public void setAdminDaoMYSQL(AdminDaoFS adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 

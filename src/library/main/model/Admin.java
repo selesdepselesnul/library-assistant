@@ -1,7 +1,11 @@
 package library.main.model;
 
+import java.io.Serializable;
 
-public class Admin {
+
+public class Admin implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	private String email;

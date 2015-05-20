@@ -9,6 +9,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
 
 public class IncomingMemberLineChartUtil {
 

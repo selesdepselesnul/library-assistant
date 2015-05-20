@@ -9,6 +9,9 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import simpleui.util.ErrorMessageWindowLoader;
+import simpleui.util.PasswordAskerWindow;
+import simpleui.util.WindowLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,16 +26,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.CalculationConfiguration;
 import library.main.model.Member;
-import library.main.util.AdminDaoMYSQL;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
 import library.main.util.IncomingMemberLineChartUtil;
-import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberPaymentDaoMYSQL;
-import library.main.util.MemberPhotoDaoFS;
-import library.main.util.PasswordAskerWindow;
 import library.main.util.PaymentCalculator;
-import library.main.util.WindowLoader;
+import library.main.util.dao.filesystem.AdminDaoFS;
+import library.main.util.dao.filesystem.MemberPhotoDaoFS;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
+import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
 
 public class MemberTableFormController implements Initializable {
 	@FXML
@@ -101,7 +101,7 @@ public class MemberTableFormController implements Initializable {
 
 	private MemberPaymentDaoMYSQL memberMonthlyPaymentDaoMYSQL;
 
-	private AdminDaoMYSQL adminDaoMYSQL;
+	private AdminDaoFS adminDaoMYSQL;
 
 	private CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL;
 
@@ -409,7 +409,7 @@ public class MemberTableFormController implements Initializable {
 		this.memberMonthlyPaymentDaoMYSQL = memberMonthlyPaymentDaoMYSQL;
 	}
 
-	public void setAdminDaoMYSQL(AdminDaoMYSQL adminDaoMYSQL) {
+	public void setAdminDaoMYSQL(AdminDaoFS adminDaoMYSQL) {
 		this.adminDaoMYSQL = adminDaoMYSQL;
 	}
 

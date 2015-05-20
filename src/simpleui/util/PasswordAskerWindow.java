@@ -1,15 +1,16 @@
-package library.main.util;
+package simpleui.util;
 
 import java.io.IOException;
 
 import library.main.controller.PasswordWindowController;
+import library.main.util.dao.filesystem.AdminDaoFS;
 
 public class PasswordAskerWindow {
 
 	private WindowLoader windowLoader;
 
 	public PasswordAskerWindow(boolean isCloseSystem, Runnable runnable,
-			AdminDaoMYSQL adminDaoMYSQL) throws IOException {
+			AdminDaoFS adminDaoMYSQL) throws IOException {
 		windowLoader = new WindowLoader(
 				"library/main/view/PasswordWindow.fxml",
 				"Masukan Password",

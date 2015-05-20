@@ -1,24 +1,23 @@
 package library.main;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.util.Properties;
 
+import simpleui.util.ErrorMessageWindowLoader;
+import simpleui.util.WindowLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import library.main.controller.LoginPanelController;
-import library.main.util.AdminDaoMYSQL;
-import library.main.util.BookDaoMYSQL;
-import library.main.util.BookPenaltyDaoMYSQL;
-import library.main.util.BorrowingDaoMYSQL;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.IndividualBookDaoMYSQL;
-import library.main.util.MYSQLConnector;
-import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberPaymentDaoMYSQL;
-import library.main.util.WindowLoader;
+import library.main.util.dao.filesystem.AdminDaoFS;
+import library.main.util.dao.mysql.BookDaoMYSQL;
+import library.main.util.dao.mysql.BookPenaltyDaoMYSQL;
+import library.main.util.dao.mysql.BorrowingDaoMYSQL;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
+import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
+import mysqlconfigurator.model.MYSQLConfiguration;
+import mysqlconfigurator.util.MYSQLConfigurationDaoFS;
+import mysqlconfigurator.util.MYSQLConnector;
 
 public class Main extends Application {
 	@Override
@@ -30,20 +29,25 @@ public class Main extends Application {
 					(fxmlLoader, stage) -> {
 						try {
 
-							Properties sqlProperties = new Properties();
-							sqlProperties.load(Files.newInputStream(Paths
-									.get("../resources/properties/sql.properties")));
+							MYSQLConfigurationDaoFS mysqlConfigurationDaoFS = new MYSQLConfigurationDaoFS(
+									"resources/properties/sql.dat");
+							MYSQLConfiguration mysqlConfiguration = mysqlConfigurationDaoFS
+									.read();
 							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
 									.getController();
 
+							new MYSQLConnector(mysqlConfiguration)
+									.getConnection().createStatement()
+									.execute("CREATE DATABASE IF NOT EXISTS library");
+
 							// and the life is begun :v
 							loginPanelController
-									.setAdminDaoMYSQL(new AdminDaoMYSQL(
-											new MYSQLConnector(sqlProperties)
-													.getConnection()));
+									.setAdminDaoMYSQL(new AdminDaoFS(
+											"resources/properties/admin.dat"));
 
 							Connection connectionWithSelectedDBase = new MYSQLConnector(
-									sqlProperties, "library").getConnection();
+									mysqlConfiguration, "library")
+									.getConnection();
 
 							loginPanelController
 									.setCalculationConfigurationDaoMYSQL(new CalculationConfigurationDaoMYSQL(
@@ -70,12 +74,16 @@ public class Main extends Application {
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
+//							Stream.of(e.getStackTrace()).forEach(
+//									st -> System.out.println(st.toString()));
+//							e.printStackTrace();
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 							System.exit(1);
 						}
 					}).show(WindowLoader.SHOW_ONLY);
 		} catch (Exception e) {
-			new ErrorMessageWindowLoader(e.getMessage()).show();
+//			e.printStackTrace();
+//			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 

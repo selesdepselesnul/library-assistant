@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
+import simpleui.util.ErrorMessageWindowLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -20,11 +21,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import library.main.model.Member;
 import library.main.model.MemberPayment;
-import library.main.util.CalculationConfigurationDaoMYSQL;
-import library.main.util.ErrorMessageWindowLoader;
-import library.main.util.MemberDaoMYSQL;
-import library.main.util.MemberPaymentDaoMYSQL;
-import library.main.util.MemberPhotoDaoFS;
+import library.main.util.dao.filesystem.MemberPhotoDaoFS;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+import library.main.util.dao.mysql.MemberDaoMYSQL;
+import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
 
 public class NewMemberFormController implements Initializable {
 

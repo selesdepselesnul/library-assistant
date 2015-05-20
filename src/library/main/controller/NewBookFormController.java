@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import simpleui.util.ErrorMessageWindowLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -13,9 +14,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import library.main.model.Book;
-import library.main.util.BookDaoMYSQL;
 import library.main.util.BookGrouper;
-import library.main.util.ErrorMessageWindowLoader;
+import library.main.util.dao.mysql.BookDaoMYSQL;
 
 public class NewBookFormController implements Initializable {
 

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import library.main.model.Book;
-import library.main.util.BookDaoMYSQL;
+import library.main.util.dao.mysql.BookDaoMYSQL;
 
 public class BookDetailController {
 

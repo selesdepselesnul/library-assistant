@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import library.main.util.dao.mysql.BorrowingDaoMYSQL;
+import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
+
 public class BookBorrowingCalculator {
 
 	public static long calculatePinaltyPayment(
