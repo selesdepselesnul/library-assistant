@@ -16,36 +16,22 @@ public class CalculationConfigurationDaoMYSQL {
 	public CalculationConfigurationDaoMYSQL(Connection connection)
 			throws SQLException {
 		this.connection = connection;
-		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SHOW TABLES");
-		boolean isTableExist = false;
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase(
-					"CalculationConfiguration")) {
-				isTableExist = true;
-			}
-
-		}
-
-		if (!isTableExist) {
-			this.connection
-					.createStatement()
-					.execute(
-							"CREATE TABLE CalculationConfiguration ( "
-									+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
-									+ "timeStampOfConfiguration TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-									+ "memberRoutinePayment BIGINT NOT NULL, "
-									+ "memberPenaltyPayment BIGINT NOT NULL, "
-									+ "memberMaxDaysOfPayment BIGINT NOT NULL, "
-									+ "bookPenaltyPayment BIGINT NOT NULL, "
-									+ "bookMaxDaysOfBorrowing BIGINT NOT NULL )");
-			this.connection.createStatement().execute(
-					"INSERT INTO CalculationConfiguration (memberRoutinePayment, "
-							+ "memberPenaltyPayment, memberMaxDaysOfPayment, "
-							+ "bookPenaltyPayment, bookMaxDaysOfBorrowing) "
-							+ "VALUES (10000, 5000, 365, 500, 7)");
-
-		}
+		this.connection
+				.createStatement()
+				.execute(
+						"CREATE TABLE IF NOT EXISTS CalculationConfiguration ( "
+								+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
+								+ "timeStampOfConfiguration TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+								+ "memberRoutinePayment BIGINT NOT NULL, "
+								+ "memberPenaltyPayment BIGINT NOT NULL, "
+								+ "memberMaxDaysOfPayment BIGINT NOT NULL, "
+								+ "bookPenaltyPayment BIGINT NOT NULL, "
+								+ "bookMaxDaysOfBorrowing BIGINT NOT NULL )");
+		this.connection.createStatement().execute(
+				"INSERT INTO CalculationConfiguration (memberRoutinePayment, "
+						+ "memberPenaltyPayment, memberMaxDaysOfPayment, "
+						+ "bookPenaltyPayment, bookMaxDaysOfBorrowing) "
+						+ "VALUES (10000, 5000, 365, 500, 7)");
 
 	}
 

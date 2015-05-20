@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,33 +15,24 @@ public class MemberDaoMYSQL {
 	private PreparedStatement preparedStat;
 
 	public MemberDaoMYSQL(Connection conn) throws SQLException {
-		boolean isTableExist = false;
 		this.connection = conn;
-		Statement stat = this.connection.createStatement();
-		ResultSet resultSet = stat.executeQuery("SHOW TABLES");
+		this.connection
+				.createStatement()
+				.execute(
+						"CREATE TABLE IF NOT EXISTS `Member` ("
 
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("Member")) {
-				isTableExist = true;
-			}
-		}
-
-		if (!isTableExist) {
-			stat.execute("CREATE TABLE `Member` ("
-					+ "`id` bigint(20) NOT NULL AUTO_INCREMENT,"
-					+ "`name` varchar(50) NOT NULL,"
-					+ "`gender` char(1) NOT NULL,"
-					+ "`email` varchar(50) DEFAULT NULL,"
-					+ "`phone` varchar(12) DEFAULT NULL,"
-					+ "`birthDate` date NOT NULL,"
-					+ "`birthPlace` varchar(50) NOT NULL,"
-					+ "`address` varchar(50) NOT NULL,"
-					+ "`photo` TEXT,"
-					+ "`timeOfRegistering` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
-					+ "`timeOflastPayment` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
-					+ "PRIMARY KEY (`id`) )");
-
-		}
+								+ "`id` bigint(20) NOT NULL AUTO_INCREMENT,"
+								+ "`name` varchar(50) NOT NULL,"
+								+ "`gender` char(1) NOT NULL,"
+								+ "`email` varchar(50) DEFAULT NULL,"
+								+ "`phone` varchar(12) DEFAULT NULL,"
+								+ "`birthDate` date NOT NULL,"
+								+ "`birthPlace` varchar(50) NOT NULL,"
+								+ "`address` varchar(50) NOT NULL,"
+								+ "`photo` TEXT,"
+								+ "`timeOfRegistering` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+								+ "`timeOflastPayment` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+								+ "PRIMARY KEY (`id`) )");
 
 	}
 

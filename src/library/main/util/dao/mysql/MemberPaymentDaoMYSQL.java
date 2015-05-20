@@ -13,40 +13,23 @@ public class MemberPaymentDaoMYSQL {
 
 	private Connection connection;
 
-	public MemberPaymentDaoMYSQL(Connection connection)
-			throws SQLException {
+	public MemberPaymentDaoMYSQL(Connection connection) throws SQLException {
 		this.connection = connection;
-		this.connection.setSchema("library");
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SHOW TABLES");
-
-		boolean isExist = false;
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("MemberMonthlyPayment")) {
-				isExist = true;
-			}
-		}
-
-		resultSet.close();
-
-		if (!isExist) {
-			this.connection
-					.createStatement()
-					.execute(
-							"CREATE TABLE MemberMonthlyPayment ( "
-									+ "id BIGINT(20) AUTO_INCREMENT, "
-									+ "dateOfPayment timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
-									+ "memberId BIGINT(20) NOT NULL, "
-									+ "amount BIGINT NOT NULL, "
-									+ "paymentMode ENUM ('monthly' , 'penalty'), "
-									+ "PRIMARY KEY (id), "
-									+ "FOREIGN KEY (memberId) REFERENCES Member (id) )");
-		}
+		this.connection
+				.createStatement()
+				.execute(
+						"CREATE TABLE IF NOT EXISTS MemberMonthlyPayment ( "
+								+ "id BIGINT(20) AUTO_INCREMENT, "
+								+ "dateOfPayment timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+								+ "memberId BIGINT(20) NOT NULL, "
+								+ "amount BIGINT NOT NULL, "
+								+ "paymentMode ENUM ('monthly' , 'penalty'), "
+								+ "PRIMARY KEY (id), "
+								+ "FOREIGN KEY (memberId) REFERENCES Member (id) )");
 
 	}
 
-	public long write(MemberPayment memberMonthlyPayment)
-			throws SQLException {
+	public long write(MemberPayment memberMonthlyPayment) throws SQLException {
 		PreparedStatement prepareStatement = this.connection
 				.prepareStatement("INSERT INTO MemberMonthlyPayment (memberId, amount, paymentMode) "
 						+ "VALUES (?, ?, ?)");

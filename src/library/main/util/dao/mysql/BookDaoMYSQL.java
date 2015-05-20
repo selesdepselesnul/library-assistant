@@ -19,27 +19,14 @@ public class BookDaoMYSQL {
 	public BookDaoMYSQL(Connection connection) throws SQLException {
 
 		this.connection = connection;
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SHOW TABLES");
-
-		boolean isTableExist = false;
-
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("Book")) {
-				isTableExist = true;
-			}
-		}
-
-		if (!isTableExist) {
-			this.connection.createStatement().execute(
-					"CREATE TABLE `Book` ( " + "`isbn` char(13) NOT NULL, "
-							+ "`title` text NOT NULL, "
-							+ "`authors` text NOT NULL, "
-							+ "`publisher` text NOT NULL, "
-							+ "`dateOfPublishing` DATE NOT NULL, "
-							+ "`category` text, " + "PRIMARY KEY (`isbn`) ) ");
-
-		}
+		this.connection.createStatement().execute(
+				"CREATE TABLE IF NOT EXISTS `Book` ( "
+						+ "`isbn` char(13) NOT NULL, "
+						+ "`title` text NOT NULL, "
+						+ "`authors` text NOT NULL, "
+						+ "`publisher` text NOT NULL, "
+						+ "`dateOfPublishing` DATE NOT NULL, "
+						+ "`category` text, " + "PRIMARY KEY (`isbn`) ) ");
 
 	}
 

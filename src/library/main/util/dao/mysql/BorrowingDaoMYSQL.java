@@ -22,31 +22,17 @@ public class BorrowingDaoMYSQL {
 		this.connection = conn;
 		this.individualBookDaoMysql = individualBookDaoMYSQL;
 
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SHOW TABLES");
-
-		boolean isTableExist = false;
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("Borrowing")) {
-
-				isTableExist = true;
-			}
-		}
-		resultSet.close();
-
-		if (!isTableExist) {
-			this.connection
-					.createStatement()
-					.execute(
-							"CREATE TABLE Borrowing ( "
-									+ "id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-									+ "memberId BIGINT NOT NULL, "
-									+ "bookId BIGINT NOT NULL, "
-									+ "timeOfBorrowing timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
-									+ "timeOfReturning timestamp NULL DEFAULT NULL, "
-									+ "FOREIGN KEY (memberId) REFERENCES Member(id), "
-									+ "FOREIGN KEY (bookId) REFERENCES IndividualBook(id) )");
-		}
+		this.connection
+				.createStatement()
+				.execute(
+						"CREATE TABLE IF NOT EXISTS Borrowing ( "
+								+ "id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+								+ "memberId BIGINT NOT NULL, "
+								+ "bookId BIGINT NOT NULL, "
+								+ "timeOfBorrowing timestamp NULL DEFAULT CURRENT_TIMESTAMP, "
+								+ "timeOfReturning timestamp NULL DEFAULT NULL, "
+								+ "FOREIGN KEY (memberId) REFERENCES Member(id), "
+								+ "FOREIGN KEY (bookId) REFERENCES IndividualBook(id) )");
 	}
 
 	public Borrowing read(long id) throws SQLException {

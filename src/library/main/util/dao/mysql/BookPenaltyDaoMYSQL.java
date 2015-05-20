@@ -15,28 +15,15 @@ public class BookPenaltyDaoMYSQL {
 
 	public BookPenaltyDaoMYSQL(Connection connection) throws SQLException {
 		this.connection = connection;
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SHOW TABLES");
-
-		boolean isAvailable = false;
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("BookPenaltyPayment")) {
-				isAvailable = true;
-			}
-		}
-		resultSet.close();
-
-		if (!isAvailable) {
-			this.connection
-					.createStatement()
-					.execute(
-							"CREATE TABLE BookPenaltyPayment ( "
-									+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
-									+ "amount BIGINT, "
-									+ "borrowingId BIGINT, "
-									+ "timeOfPayment TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-									+ "FOREIGN KEY (borrowingId) REFERENCES Borrowing (id) )");
-		}
+		this.connection
+				.createStatement()
+				.execute(
+						"CREATE TABLE IF NOT EXISTS BookPenaltyPayment ( "
+								+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
+								+ "amount BIGINT, "
+								+ "borrowingId BIGINT, "
+								+ "timeOfPayment TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+								+ "FOREIGN KEY (borrowingId) REFERENCES Borrowing (id) )");
 	}
 
 	public long write(BookPenalty bookPenalty) throws SQLException {

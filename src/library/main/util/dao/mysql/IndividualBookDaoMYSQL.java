@@ -15,26 +15,13 @@ public class IndividualBookDaoMYSQL {
 	public IndividualBookDaoMYSQL(Connection connection) throws SQLException {
 
 		this.connection = connection;
-		ResultSet resultSet = this.connection.createStatement().executeQuery(
-				"SHOW TABLES");
-
-		boolean isTableExist = false;
-
-		while (resultSet.next()) {
-			if (resultSet.getString(1).equalsIgnoreCase("IndividualBook")) {
-				isTableExist = true;
-			}
-		}
-
-		if (!isTableExist) {
-			this.connection.createStatement().execute(
-					"CREATE TABLE IndividualBook ( "
-							+ "id BIGINT NOT NULL AUTO_INCREMENT, "
-							+ "isbn CHAR(13) NOT NULL, "
-							+ "isAvailable boolean NOT NULL DEFAULT TRUE, "
-							+ "PRIMARY KEY (`id`), "
-							+ "FOREIGN KEY (isbn) REFERENCES Book(isbn) )");
-		}
+		this.connection.createStatement().execute(
+				"CREATE TABLE IF NOT EXISTS IndividualBook ( "
+						+ "id BIGINT NOT NULL AUTO_INCREMENT, "
+						+ "isbn CHAR(13) NOT NULL, "
+						+ "isAvailable boolean NOT NULL DEFAULT TRUE, "
+						+ "PRIMARY KEY (`id`), "
+						+ "FOREIGN KEY (isbn) REFERENCES Book(isbn) )");
 
 	}
 
@@ -178,9 +165,11 @@ public class IndividualBookDaoMYSQL {
 
 	}
 
-	public long updateAvailability(long bookId, boolean isAvailable) throws SQLException {
-		PreparedStatement prepareStatement = this.connection.prepareStatement("UPDATE IndividualBook "
-				+ "SET isAvailable = ? " + "WHERE id = ?");
+	public long updateAvailability(long bookId, boolean isAvailable)
+			throws SQLException {
+		PreparedStatement prepareStatement = this.connection
+				.prepareStatement("UPDATE IndividualBook "
+						+ "SET isAvailable = ? " + "WHERE id = ?");
 		prepareStatement.setBoolean(1, isAvailable);
 		prepareStatement.setLong(2, bookId);
 		prepareStatement.execute();

@@ -37,8 +37,10 @@ public class Main extends Application {
 									.getController();
 
 							new MYSQLConnector(mysqlConfiguration)
-									.getConnection().createStatement()
-									.execute("CREATE DATABASE IF NOT EXISTS library");
+									.getConnection()
+									.createStatement()
+									.execute(
+											"CREATE DATABASE IF NOT EXISTS library");
 
 							// and the life is begun :v
 							loginPanelController
@@ -74,16 +76,12 @@ public class Main extends Application {
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
 						} catch (Exception e) {
-//							Stream.of(e.getStackTrace()).forEach(
-//									st -> System.out.println(st.toString()));
-//							e.printStackTrace();
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 							System.exit(1);
 						}
 					}).show(WindowLoader.SHOW_ONLY);
 		} catch (Exception e) {
-//			e.printStackTrace();
-//			new ErrorMessageWindowLoader(e.getMessage()).show();
+			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
 	}
 
