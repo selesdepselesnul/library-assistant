@@ -63,6 +63,7 @@ public class MemberPhotoDaoFS {
 				Files.delete(Paths.get(this.member.getPhoto()));
 			}
 		}
+
 		Files.copy(sourcePhotoPath, Paths.get(this.member.getPhoto()));
 		return this.member.getPhoto();
 	}

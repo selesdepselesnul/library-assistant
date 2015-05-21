@@ -23,10 +23,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import library.main.model.Book;
 import library.main.model.IndividualBook;
 import library.main.util.BookGrouper;
-import library.main.util.BookPieChartUtil;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.mysql.BookDaoMYSQL;
 import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
+import library.main.util.view.BookPieChartUtil;
 
 public class BookTableFormController implements Initializable {
 

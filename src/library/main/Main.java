@@ -76,6 +76,7 @@ public class Main extends Application {
 									.setBookPenaltyPaymentDaoMYSQL(new BookPenaltyDaoMYSQL(
 											connectionWithSelectedDBase));
 							loginPanelController.setLoginPanelStage(stage);
+
 						} catch (Exception e) {
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 							System.exit(1);

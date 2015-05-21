@@ -26,13 +26,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import library.main.model.CalculationConfiguration;
 import library.main.model.Member;
-import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.PaymentCalculator;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.filesystem.MemberPhotoDaoFS;
 import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 import library.main.util.dao.mysql.MemberDaoMYSQL;
 import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
+import library.main.util.view.IncomingMemberLineChartUtil;
 
 public class MemberTableFormController implements Initializable {
 	@FXML

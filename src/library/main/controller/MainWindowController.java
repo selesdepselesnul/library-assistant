@@ -29,8 +29,6 @@ import javafx.scene.image.ImageView;
 import library.main.model.Borrowing;
 import library.main.model.BorrowingHistory;
 import library.main.model.PaymentReportSummary;
-import library.main.util.BookPieChartUtil;
-import library.main.util.IncomingMemberLineChartUtil;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.mysql.BookDaoMYSQL;
 import library.main.util.dao.mysql.BookPenaltyDaoMYSQL;
@@ -39,6 +37,8 @@ import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
 import library.main.util.dao.mysql.MemberDaoMYSQL;
 import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
+import library.main.util.view.BookPieChartUtil;
+import library.main.util.view.IncomingMemberLineChartUtil;
 
 public class MainWindowController implements Initializable {
 
