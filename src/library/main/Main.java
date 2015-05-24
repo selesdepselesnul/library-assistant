@@ -34,8 +34,6 @@ public class Main extends Application {
 									LibraryAssistantResourcesPath.SQL_CONFIG_PATH);
 							MYSQLConfiguration mysqlConfiguration = mysqlConfigurationDaoFS
 									.read();
-							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
-									.getController();
 
 							new MYSQLConnector(mysqlConfiguration)
 									.getConnection()
@@ -44,6 +42,8 @@ public class Main extends Application {
 											"CREATE DATABASE IF NOT EXISTS library");
 
 							// and the life is begun :v
+							LoginPanelController loginPanelController = (LoginPanelController) fxmlLoader
+									.getController();
 							loginPanelController
 									.setAdminDaoMYSQL(new AdminDaoFS(
 											LibraryAssistantResourcesPath.ADMIN_CONFIG_PATH));

@@ -1,4 +1,4 @@
-package library.main.util.view;
+package library.main.util.window;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

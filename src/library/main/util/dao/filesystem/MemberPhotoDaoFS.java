@@ -11,10 +11,6 @@ import javafx.scene.image.Image;
 import library.main.model.Member;
 import library.main.util.LibraryAssistantResourcesPath;
 
-/**
- * @author morrisseymarr
- *
- */
 public class MemberPhotoDaoFS {
 	public static final String NO_PHOTO = "library/main/resources/images/no_photo.png";
 	public static final Path MEMBER_PHOTO_PATH = Paths

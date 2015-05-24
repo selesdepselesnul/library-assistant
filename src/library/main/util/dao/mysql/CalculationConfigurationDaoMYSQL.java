@@ -27,18 +27,27 @@ public class CalculationConfigurationDaoMYSQL {
 								+ "memberMaxDaysOfPayment BIGINT NOT NULL, "
 								+ "bookPenaltyPayment BIGINT NOT NULL, "
 								+ "bookMaxDaysOfBorrowing BIGINT NOT NULL )");
-		this.connection.createStatement().execute(
-				"INSERT INTO CalculationConfiguration (memberRoutinePayment, "
-						+ "memberPenaltyPayment, memberMaxDaysOfPayment, "
-						+ "bookPenaltyPayment, bookMaxDaysOfBorrowing) "
-						+ "VALUES (10000, 5000, 365, 500, 7)");
+		insertDefaultIfNull();
 
+	}
+
+	private void insertDefaultIfNull() throws SQLException {
+		ResultSet resultSet = this.connection.createStatement().executeQuery(
+				"SELECT * FROM CalculationConfiguration");
+		if (!resultSet.next()) {
+			this.connection.createStatement().execute(
+					"INSERT INTO CalculationConfiguration (memberRoutinePayment, "
+							+ "memberPenaltyPayment, memberMaxDaysOfPayment, "
+							+ "bookPenaltyPayment, bookMaxDaysOfBorrowing) "
+							+ "VALUES (10000, 5000, 365, 500, 7)");
+		}
 	}
 
 	public List<CalculationConfiguration> readAll() throws SQLException {
 		ResultSet resultSet = this.connection.createStatement().executeQuery(
 				"SELECT * FROM CalculationConfiguration");
 		List<CalculationConfiguration> calculationConfigurationList = new ArrayList<>();
+
 		while (resultSet.next()) {
 			calculationConfigurationList.add(new CalculationConfiguration(
 					resultSet.getLong("id"), resultSet

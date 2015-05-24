@@ -37,8 +37,8 @@ import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
 import library.main.util.dao.mysql.MemberDaoMYSQL;
 import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
-import library.main.util.view.BookPieChartUtil;
-import library.main.util.view.IncomingMemberLineChartUtil;
+import library.main.util.window.BookPieChartUtil;
+import library.main.util.window.IncomingMemberLineChartUtil;
 
 public class MainWindowController implements Initializable {
 
@@ -250,6 +250,7 @@ public class MainWindowController implements Initializable {
 					"laporan iuran & denda perpustakaan",
 					calculationConfigurationDaoMYSQL.readAll(),
 					"laporan iuran & denda", false);
+
 			libraryReporter.addColumns(idColumn, timeStampOfConfiguringColumn,
 					memberRoutinePaymentColumn, memberPenaltyPaymentColumn,
 					memberMaxdaysOfPaymentColumn, bookPenaltyPaymentColumn,

@@ -32,7 +32,7 @@ import library.main.util.dao.filesystem.MemberPhotoDaoFS;
 import library.main.util.dao.mysql.CalculationConfigurationDaoMYSQL;
 import library.main.util.dao.mysql.MemberDaoMYSQL;
 import library.main.util.dao.mysql.MemberPaymentDaoMYSQL;
-import library.main.util.view.IncomingMemberLineChartUtil;
+import library.main.util.window.IncomingMemberLineChartUtil;
 
 public class MemberTableFormController implements Initializable {
 	@FXML

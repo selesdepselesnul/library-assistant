@@ -26,7 +26,7 @@ import library.main.util.BookGrouper;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.mysql.BookDaoMYSQL;
 import library.main.util.dao.mysql.IndividualBookDaoMYSQL;
-import library.main.util.view.BookPieChartUtil;
+import library.main.util.window.BookPieChartUtil;
 
 public class BookTableFormController implements Initializable {
 

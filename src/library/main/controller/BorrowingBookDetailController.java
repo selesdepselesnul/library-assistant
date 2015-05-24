@@ -56,7 +56,7 @@ public class BorrowingBookDetailController implements Initializable {
 			BookPenaltyDaoMYSQL bookPenaltyPaymentDaoMYSQL) throws SQLException {
 		this.bookPenaltyPaymentDaoMYSQL = bookPenaltyPaymentDaoMYSQL;
 		long bookPenaltyAmount = BookBorrowingCalculator
-				.calculatePenaltyPayment(this.borrowingDaoMYSQL,
+				.calculatePinaltyPayment(this.borrowingDaoMYSQL,
 						this.calculationConfigurationDaoMYSQL, this.borrowingId);
 		this.pinaltyText.setText(bookPenaltyAmount + "");
 		if (bookPenaltyAmount > 0) {

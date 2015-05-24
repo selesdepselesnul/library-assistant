@@ -24,19 +24,19 @@ public class PaymentCalculator {
 		return totalPayment;
 	}
 
-	public PaymentCalculator(Member member, CalculationConfiguration calculationConfiguration) {
+	public PaymentCalculator(Member member,
+			CalculationConfiguration calculationConfiguration) {
 		LocalDate lastPayment = member.getTimeOfLastPayment();
 		daysSinceLastPayment = ChronoUnit.DAYS.between(lastPayment,
 				LocalDate.now());
 
-		System.out.println("calculation cofiguration = " + calculationConfiguration);
-		if (daysSinceLastPayment >= calculationConfiguration.getMemberMaxDaysOfPayment()) {
-			if (daysSinceLastPayment > calculationConfiguration.getMemberMaxDaysOfPayment()) {
+		if (daysSinceLastPayment >= calculationConfiguration
+				.getMemberMaxDaysOfPayment()) {
+			if (daysSinceLastPayment > calculationConfiguration
+					.getMemberMaxDaysOfPayment()) {
 				this.totalPenaltyPayment = (daysSinceLastPayment - calculationConfiguration
 						.getMemberMaxDaysOfPayment())
 						* calculationConfiguration.getMemberPenaltyPayment();
-				System.out.println("total penalty payment = "
-						+ this.totalPenaltyPayment);
 			} else {
 				this.totalPenaltyPayment = 0L;
 			}
