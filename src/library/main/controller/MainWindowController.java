@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -58,7 +59,22 @@ public class MainWindowController implements Initializable {
 	private ImageView libararyImageView;
 
 	@FXML
+	private MenuItem bookReportingMenuItem;
+
+	@FXML
 	private TextField borrowingBookIdTextField;
+
+	@FXML
+	private MenuItem reportMenuItem;
+
+	@FXML
+	private MenuItem configMenuItem;
+
+	@FXML
+	private MenuItem closeMenuItem;
+
+	@FXML
+	private MenuItem aboutMenuItem;
 
 	private MemberDaoMYSQL memberDaoMYSQL;
 
@@ -82,6 +98,28 @@ public class MainWindowController implements Initializable {
 				.setImage(new Image(
 						ClassLoader
 								.getSystemResourceAsStream("library/main/resources/images/library_assistant.png")));
+		this.reportMenuItem
+				.setGraphic(new ImageView(
+						new Image(
+								ClassLoader
+										.getSystemResourceAsStream("library/main/resources/images/report.png"))));
+		this.configMenuItem
+				.setGraphic(new ImageView(
+						new Image(
+								ClassLoader
+										.getSystemResourceAsStream("library/main/resources/images/config.png"))));
+
+		this.closeMenuItem
+				.setGraphic(new ImageView(
+						new Image(
+								ClassLoader
+										.getSystemResourceAsStream("library/main/resources/images/close.png"))));
+
+		this.aboutMenuItem
+				.setGraphic(new ImageView(
+						new Image(
+								ClassLoader
+										.getSystemResourceAsStream("library/main/resources/images/about.png"))));
 
 	}
 
@@ -871,5 +909,5 @@ public class MainWindowController implements Initializable {
 			CalculationConfigurationDaoMYSQL calculationConfigurationDaoMYSQL) {
 		this.calculationConfigurationDaoMYSQL = calculationConfigurationDaoMYSQL;
 	}
-	
+
 }

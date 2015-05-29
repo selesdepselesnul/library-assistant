@@ -20,7 +20,8 @@ public class WindowLoader {
 				ClassLoader.getSystemResource(sourceResource));
 		Parent root = fxmlLoader.load();
 		this.stage = new Stage();
-		this.stage.setScene(new Scene(root));
+		Scene scene = new Scene(root);
+		this.stage.setScene(scene);
 		this.stage.setTitle(subWindowTitle);
 		this.stage.setResizable(false);
 		this.stage.initModality(Modality.APPLICATION_MODAL);
