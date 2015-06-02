@@ -340,7 +340,7 @@
 						<Font name="System Bold" size="24.0" />
 					</font>
 				</Text>
-				<ImageView fx:id="libararyImageView" fitHeight="78.0"
+				<ImageView fx:id="libraryImageView" fitHeight="78.0"
 					fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
 					<GridPane.margin>
 						<Insets left="100.0" />

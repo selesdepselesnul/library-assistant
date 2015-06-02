@@ -56,7 +56,7 @@ public class MainWindowController implements Initializable {
 	private TextField bookIsbnTextField;
 
 	@FXML
-	private ImageView libararyImageView;
+	private ImageView libraryImageView;
 
 	@FXML
 	private MenuItem bookReportingMenuItem;
@@ -94,7 +94,7 @@ public class MainWindowController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.libararyImageView
+		this.libraryImageView
 				.setImage(new Image(
 						ClassLoader
 								.getSystemResourceAsStream("library/main/resources/images/library_assistant.png")));
