@@ -50,7 +50,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                  						<TextField fx:id="usernameTextField" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" onAction="#handleOnFieldNull" onKeyPressed="#handleOnFieldNull" prefHeight="25.0" prefWidth="330.0" GridPane.columnIndex="1">
+                  						<TextField id="username" fx:id="usernameTextField" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" onAction="#handleOnFieldNull" onKeyPressed="#handleOnFieldNull" prefHeight="25.0" prefWidth="330.0" GridPane.columnIndex="1">
                   							<GridPane.margin>
                   								<Insets right="30.0" />
                   							</GridPane.margin>
@@ -65,7 +65,7 @@
                               <Insets left="10.0" />
                            </GridPane.margin>
                         </Label>
-                  						<PasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308" onKeyPressed="#handleOnFieldNull" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  						<PasswordField id="password" fx:id="passwordField" maxWidth="1.7976931348623157E308" onKeyPressed="#handleOnFieldNull" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   							<GridPane.margin>
                   								<Insets right="30.0" />
                   							</GridPane.margin>

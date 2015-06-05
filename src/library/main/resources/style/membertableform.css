@@ -1,0 +1,6 @@
+#filter-text-field {
+  -fx-background-image:url('../images/icon/filter.png');
+  -fx-background-position: right center;
+  -fx-background-repeat: no-repeat 
+}
+

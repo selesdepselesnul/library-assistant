@@ -76,6 +76,9 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private MenuItem aboutMenuItem;
 
+	@FXML
+	private MenuItem summaryStatisticMenuItem;
+
 	private MemberDaoMYSQL memberDaoMYSQL;
 
 	private BookDaoMYSQL bookDaoMYSQL;
@@ -97,12 +100,12 @@ public class MainWindowController implements Initializable {
 		this.libraryImageView
 				.setImage(new Image(
 						ClassLoader
-								.getSystemResourceAsStream("library/main/resources/images/library_assistant.png")));
+								.getSystemResourceAsStream("library/main/resources/images/logo.png")));
 		this.reportMenuItem
 				.setGraphic(new ImageView(
 						new Image(
 								ClassLoader
-										.getSystemResourceAsStream("library/main/resources/images/report.png"))));
+										.getSystemResourceAsStream("library/main/resources/images/icon/report.png"))));
 		this.configMenuItem
 				.setGraphic(new ImageView(
 						new Image(
@@ -120,6 +123,12 @@ public class MainWindowController implements Initializable {
 						new Image(
 								ClassLoader
 										.getSystemResourceAsStream("library/main/resources/images/about.png"))));
+
+		this.summaryStatisticMenuItem
+				.setGraphic(new ImageView(
+						new Image(
+								ClassLoader
+										.getSystemResourceAsStream("library/main/resources/images/icon/summary_statistic.png"))));
 
 	}
 
@@ -287,7 +296,8 @@ public class MainWindowController implements Initializable {
 			LibraryReporter libraryReporter = new LibraryReporter(
 					"laporan iuran & denda perpustakaan",
 					calculationConfigurationDaoMYSQL.readAll(),
-					"laporan iuran & denda", false);
+					"laporan iuran & denda",
+					"library/main/resources/images/const_payment_report.png", false);
 
 			libraryReporter.addColumns(idColumn, timeStampOfConfiguringColumn,
 					memberRoutinePaymentColumn, memberPenaltyPaymentColumn,
@@ -344,6 +354,7 @@ public class MainWindowController implements Initializable {
 		try {
 			new WindowLoader(
 					"library/main/view/MemberTableForm.fxml",
+					"library/main/resources/style/membertableform.css",
 					"Daftar Semua Anggota",
 					(fxmlLoader, stage) -> {
 						try {
@@ -424,6 +435,7 @@ public class MainWindowController implements Initializable {
 		try {
 			new WindowLoader(
 					"library/main/view/BookTableForm.fxml",
+					"library/main/resources/style/booktableform.css",
 					"Daftar Semua Buku",
 					(fxmlLoader, stage) -> {
 						try {
@@ -772,7 +784,8 @@ public class MainWindowController implements Initializable {
 
 			LibraryReporter libraryReporter;
 			libraryReporter = new LibraryReporter("Daftar Stock Buku",
-					this.bookDaoMYSQL.readAll(), "Laporan Buku", true);
+					this.bookDaoMYSQL.readAll(), "Laporan Buku",
+					"library/main/resources/images/book_report.png", true);
 			libraryReporter.addColumns(titleColumn, authorsColumn, isbnColumn,
 					categoryColumn, publisherColumn, availableAmountColumn,
 					notAvailableAmountColumn, amountColumn);
@@ -830,7 +843,8 @@ public class MainWindowController implements Initializable {
 							DynamicReports.type.longType());
 			LibraryReporter libraryReporter = new LibraryReporter(
 					"Daftar Pembayaran Anggota", paymentReportSummarieList,
-					"Laporan Pembayaran Anggota", false);
+					"Laporan Pembayaran Anggota",
+					"library/main/resources/images/payment_report.png", false);
 			libraryReporter.addColumns(timeOfPaymentColumn,
 					memberMonthlyPaymentColumn, memberPenaltyColumn,
 					bookPenaltyColumn);

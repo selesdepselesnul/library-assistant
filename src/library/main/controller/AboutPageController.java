@@ -20,7 +20,7 @@ public class AboutPageController implements Initializable {
 		this.aboutPageImageView
 				.setImage(new Image(
 						ClassLoader
-								.getSystemResourceAsStream("library/main/resources/images/library_assistant.png")));
+								.getSystemResourceAsStream("library/main/resources/images/logo.png")));
 		handleLicenseButton();
 	}
 

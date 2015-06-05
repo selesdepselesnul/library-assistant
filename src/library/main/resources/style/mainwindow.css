@@ -1,0 +1,7 @@
+
+.text-field {
+  -fx-background-image:url('../images/icon/search.png');
+  -fx-background-position: right center;
+  -fx-background-repeat: no-repeat 
+}
+

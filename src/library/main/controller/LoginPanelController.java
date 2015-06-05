@@ -103,6 +103,7 @@ public class LoginPanelController implements Initializable {
 				try {
 					new WindowLoader(
 							"library/main/view/MainWindow.fxml",
+							"library/main/resources/style/mainwindow.css",
 							"Library Assistant -BETA-",
 							(fxmlLoader, stage) -> {
 								try {

@@ -30,6 +30,26 @@ public class WindowLoader {
 		}
 	}
 
+	public WindowLoader(String sourceResource, String styleResource,
+			String windowTitle, BiConsumer<FXMLLoader, Stage> biConsumer)
+			throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(
+				ClassLoader.getSystemResource(sourceResource));
+		Parent root = fxmlLoader.load();
+		this.stage = new Stage();
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add(
+				ClassLoader.getSystemResource(styleResource).toExternalForm());
+		this.stage.setScene(scene);
+		this.stage.setTitle(windowTitle);
+		this.stage.setResizable(false);
+		this.stage.initModality(Modality.APPLICATION_MODAL);
+		if (biConsumer != null) {
+			biConsumer.accept(fxmlLoader, this.stage);
+		}
+
+	}
+
 	public void show(int mode) {
 		if (mode == SHOW_AND_WAITING) {
 			stage.showAndWait();

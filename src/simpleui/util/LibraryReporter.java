@@ -24,7 +24,7 @@ public class LibraryReporter {
 	private ColumnBuilder<?, ?> numberColumn;
 
 	public LibraryReporter(String reportTitle, Collection<?> dataSource,
-			String windowTitle, boolean isEnableAutoNumber) throws DRException {
+			String windowTitle, String image, boolean isEnableAutoNumber) throws DRException {
 
 		this.windowTitle = windowTitle;
 		// style
@@ -44,7 +44,7 @@ public class LibraryReporter {
 				HorizontalAlignment.CENTER);
 		ImageBuilder logoImageBuilder = DynamicReports.cmp
 				.image(ClassLoader
-						.getSystemResourceAsStream("library/main/resources/images/library_assistant.png"))
+						.getSystemResourceAsStream(image))
 				.setFixedDimension(80, 80)
 				.setStyle(
 						DynamicReports.stl.style().setHorizontalAlignment(

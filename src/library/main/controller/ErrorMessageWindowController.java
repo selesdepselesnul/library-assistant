@@ -37,7 +37,7 @@ public class ErrorMessageWindowController implements Initializable {
 			this.errorImageView
 					.setImage(new Image(
 							ClassLoader
-									.getSystemResourceAsStream("library/main/resources/images/error_icon.jpg")));
+									.getSystemResourceAsStream("library/main/resources/images/error_icon.png")));
 			this.quotationText
 					.setText(readMessage("library/main/resources/text/quotations_about_mistakes.txt"));
 			this.errorexplanationtext

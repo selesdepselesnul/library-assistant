@@ -24,8 +24,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			new WindowLoader(
+			WindowLoader windowLoader = new WindowLoader(
 					"library/main/view/LoginWindow.fxml",
+					"library/main/resources/style/loginwindow.css",
 					"Login Window",
 					(fxmlLoader, stage) -> {
 						try {
@@ -79,11 +80,14 @@ public class Main extends Application {
 
 						} catch (Exception e) {
 							new ErrorMessageWindowLoader(e.getMessage()).show();
+							e.printStackTrace();
 							System.exit(1);
 						}
-					}).show(WindowLoader.SHOW_ONLY);
+					});
+			windowLoader.show(WindowLoader.SHOW_ONLY);
 		} catch (Exception e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
+			e.printStackTrace();
 		}
 	}
 
