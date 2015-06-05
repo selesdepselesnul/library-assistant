@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -43,6 +44,10 @@ public class WindowLoader {
 		this.stage.setScene(scene);
 		this.stage.setTitle(windowTitle);
 		this.stage.initModality(Modality.APPLICATION_MODAL);
+		stage.getIcons()
+		.add(new Image(
+				ClassLoader
+						.getSystemResourceAsStream("library/main/resources/images/book_icon.png")));
 		if (biConsumer != null) {
 			biConsumer.accept(fxmlLoader, this.stage);
 		}

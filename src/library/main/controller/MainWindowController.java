@@ -56,9 +56,6 @@ public class MainWindowController implements Initializable {
 	private TextField bookIsbnTextField;
 
 	@FXML
-	private ImageView libraryImageView;
-
-	@FXML
 	private MenuItem bookReportingMenuItem;
 
 	@FXML
@@ -79,9 +76,6 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private MenuItem summaryStatisticMenuItem;
 
-	@FXML
-	private ImageView textLogoImageView;
-
 	private MemberDaoMYSQL memberDaoMYSQL;
 
 	private BookDaoMYSQL bookDaoMYSQL;
@@ -100,10 +94,7 @@ public class MainWindowController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.libraryImageView
-				.setImage(new Image(
-						ClassLoader
-								.getSystemResourceAsStream("library/main/resources/images/logo.png")));
+
 		this.reportMenuItem
 				.setGraphic(new ImageView(
 						new Image(
@@ -132,11 +123,6 @@ public class MainWindowController implements Initializable {
 						new Image(
 								ClassLoader
 										.getSystemResourceAsStream("library/main/resources/images/icon/summary_statistic.png"))));
-
-		this.textLogoImageView
-				.setImage(new Image(
-						ClassLoader
-								.getSystemResourceAsStream("library/main/resources/images/text_logo.png")));
 
 	}
 

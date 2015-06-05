@@ -129,11 +129,12 @@ public class LoginPanelController implements Initializable {
 
 									this.loginPanelStage.close();
 
-//									stage.initStyle(StageStyle.UNDECORATED);
+									// stage.initStyle(StageStyle.UNDECORATED);
 									stage.setMaximized(true);
 									stage.setTitle("Library-assistant v1.0.0");
-//									stage.setResizable(false);
-//									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+									
+									// stage.setResizable(false);
+									// stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 									stage.setFullScreen(true);
 								} catch (Exception e) {
 									new ErrorMessageWindowLoader(e.getMessage())
