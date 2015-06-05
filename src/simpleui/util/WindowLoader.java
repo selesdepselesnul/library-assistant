@@ -42,12 +42,15 @@ public class WindowLoader {
 				ClassLoader.getSystemResource(styleResource).toExternalForm());
 		this.stage.setScene(scene);
 		this.stage.setTitle(windowTitle);
-		this.stage.setResizable(false);
 		this.stage.initModality(Modality.APPLICATION_MODAL);
 		if (biConsumer != null) {
 			biConsumer.accept(fxmlLoader, this.stage);
 		}
 
+	}
+	
+	public void setResizable(boolean isResizeable) {
+		this.stage.setResizable(isResizeable);
 	}
 
 	public void show(int mode) {

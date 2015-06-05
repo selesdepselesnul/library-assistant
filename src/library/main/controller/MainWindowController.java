@@ -79,6 +79,9 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private MenuItem summaryStatisticMenuItem;
 
+	@FXML
+	private ImageView textLogoImageView;
+
 	private MemberDaoMYSQL memberDaoMYSQL;
 
 	private BookDaoMYSQL bookDaoMYSQL;
@@ -129,6 +132,11 @@ public class MainWindowController implements Initializable {
 						new Image(
 								ClassLoader
 										.getSystemResourceAsStream("library/main/resources/images/icon/summary_statistic.png"))));
+
+		this.textLogoImageView
+				.setImage(new Image(
+						ClassLoader
+								.getSystemResourceAsStream("library/main/resources/images/text_logo.png")));
 
 	}
 
@@ -297,7 +305,8 @@ public class MainWindowController implements Initializable {
 					"laporan iuran & denda perpustakaan",
 					calculationConfigurationDaoMYSQL.readAll(),
 					"laporan iuran & denda",
-					"library/main/resources/images/const_payment_report.png", false);
+					"library/main/resources/images/const_payment_report.png",
+					false);
 
 			libraryReporter.addColumns(idColumn, timeStampOfConfiguringColumn,
 					memberRoutinePaymentColumn, memberPenaltyPaymentColumn,
@@ -352,7 +361,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleDisplayAllMembers() {
 		try {
-			new WindowLoader(
+			WindowLoader windowLoader = new WindowLoader(
 					"library/main/view/MemberTableForm.fxml",
 					"library/main/resources/style/membertableform.css",
 					"Daftar Semua Anggota",
@@ -376,7 +385,9 @@ public class MainWindowController implements Initializable {
 							new ErrorMessageWindowLoader(e.getMessage()).show();
 						}
 
-					}).show(WindowLoader.SHOW_AND_WAITING);
+					});
+			windowLoader.setResizable(false);
+			windowLoader.show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}
@@ -384,12 +395,7 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	public void handleCloseMenuItem() {
-		try {
-			new PasswordAskerWindow(true, null, this.adminDaoMYSQL)
-					.showAndWait();
-		} catch (IOException e) {
-			new ErrorMessageWindowLoader(e.getMessage());
-		}
+		System.exit(0);
 	}
 
 	@FXML
@@ -433,7 +439,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	public void handleDisplayAllBooks() {
 		try {
-			new WindowLoader(
+			WindowLoader windowLoader = new WindowLoader(
 					"library/main/view/BookTableForm.fxml",
 					"library/main/resources/style/booktableform.css",
 					"Daftar Semua Buku",
@@ -455,7 +461,9 @@ public class MainWindowController implements Initializable {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					}).show(WindowLoader.SHOW_AND_WAITING);
+					});
+			windowLoader.setResizable(false);
+			windowLoader.show(WindowLoader.SHOW_AND_WAITING);
 		} catch (IOException e) {
 			new ErrorMessageWindowLoader(e.getMessage()).show();
 		}

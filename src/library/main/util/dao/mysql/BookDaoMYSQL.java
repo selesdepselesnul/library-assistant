@@ -26,7 +26,8 @@ public class BookDaoMYSQL {
 						+ "`authors` text NOT NULL, "
 						+ "`publisher` text NOT NULL, "
 						+ "`dateOfPublishing` DATE NOT NULL, "
-						+ "`category` text, " + "PRIMARY KEY (`isbn`) ) ");
+						+ "`category` text NOT NULL, "
+						+ "PRIMARY KEY (`isbn`) ) ");
 
 	}
 

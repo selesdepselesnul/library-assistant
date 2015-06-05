@@ -17,9 +17,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import library.main.model.Admin;
 import library.main.util.dao.filesystem.AdminDaoFS;
 import library.main.util.dao.mysql.BookDaoMYSQL;
@@ -131,9 +129,11 @@ public class LoginPanelController implements Initializable {
 
 									this.loginPanelStage.close();
 
-									stage.initStyle(StageStyle.UNDECORATED);
+//									stage.initStyle(StageStyle.UNDECORATED);
 									stage.setMaximized(true);
-									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+									stage.setTitle("Library-assistant v1.0.0");
+//									stage.setResizable(false);
+//									stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 									stage.setFullScreen(true);
 								} catch (Exception e) {
 									new ErrorMessageWindowLoader(e.getMessage())

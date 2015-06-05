@@ -20,8 +20,8 @@ public class BookPenaltyDaoMYSQL {
 				.execute(
 						"CREATE TABLE IF NOT EXISTS BookPenaltyPayment ( "
 								+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
-								+ "amount BIGINT, "
-								+ "borrowingId BIGINT, "
+								+ "amount BIGINT NOT NULL, "
+								+ "borrowingId BIGINT NOT NULL, "
 								+ "timeOfPayment TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
 								+ "FOREIGN KEY (borrowingId) REFERENCES Borrowing (id) )");
 	}
